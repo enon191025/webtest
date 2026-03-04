@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX SPACE</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#020408;--space:#060d1a;--panel:#0a1628;--panel2:#0d1f35;--border:#1a4a7a44;--b2:#1e90ff33;--cyan:#00d4ff;--c2:#0099cc;--red:#ff3355;--orange:#ff8800;--green:#00ff88;--yellow:#ffdd00;--purple:#aa44ff;--text:#c8e8ff;--muted:#4a7a9b}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;min-height:100vh;overflow-x:hidden}
+#sf{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 20% 50%,#0a1628,#020408 70%)}
+.star{position:absolute;background:#fff;border-radius:50%;animation:tw linear infinite}
+@keyframes tw{0%,100%{opacity:.15}50%{opacity:1}}
+.screen{display:none;min-height:100vh;position:relative;z-index:1}
+.screen.active{display:flex;flex-direction:column}
+#intro{align-items:center;justify-content:center;text-align:center;padding:2rem}
+.ship-wrap{width:140px;height:140px;margin:0 auto 2rem;animation:fl 3s ease-in-out infinite;position:relative}
+.glow{position:absolute;inset:-15px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,255,.15),transparent 70%);animation:pg 2s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes pg{0%,100%{opacity:.5}50%{opacity:1}}
+.ititle{font-family:'Orbitron',monospace;font-size:clamp(2.5rem,8vw,5rem);font-weight:900;letter-spacing:.1em;color:var(--cyan);text-shadow:0 0 30px rgba(0,212,255,.5);margin-bottom:.3rem}
+.isub{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.3em;color:var(--muted);margin-bottom:1.5rem}
+.idesc{font-size:.9rem;line-height:2;color:rgba(200,232,255,.7);max-width:480px;margin:0 auto 2rem}
+.badges{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem}
+.badge{background:rgba(0,212,255,.08);border:1px solid var(--b2);padding:.3rem .8rem;font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--cyan)}
+.btn-start{background:linear-gradient(135deg,var(--cyan),var(--c2));color:var(--bg);padding:1rem 3rem;font-family:'Orbitron',monospace;font-size:.8rem;letter-spacing:.15em;font-weight:700;border:none;cursor:pointer;transition:all .3s;box-shadow:0 0 30px rgba(0,212,255,.4);clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+.btn-start:hover{transform:translateY(-3px);box-shadow:0 0 50px rgba(0,212,255,.6)}
+.hud{background:rgba(6,13,26,.95);border-bottom:1px solid var(--b2);padding:.8rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+.hlogo{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:var(--cyan)}
+.hmis{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.2em;color:var(--muted)}
+.hright{display:flex;align-items:center;gap:1.5rem}
+.tval{font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:700;color:var(--cyan);letter-spacing:.05em;transition:color .3s}
+.tval.warn{color:var(--orange);animation:pt .8s infinite}
+.tval.danger{color:var(--red);animation:pt .4s infinite}
+@keyframes pt{0%,100%{opacity:1}50%{opacity:.3}}
+.tlbl,.slbl{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.15em;color:var(--muted)}
+.sval{font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:var(--green)}
+.prog{height:3px;background:rgba(0,212,255,.1)}
+.progf{height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));transition:width .5s}
+.glayout{flex:1;display:grid;grid-template-columns:250px 1fr 210px;height:calc(100vh - 74px)}
+.pleft,.pright{background:var(--panel);padding:1rem;overflow-y:auto;display:flex;flex-direction:column;gap:1rem}
+.pleft{border-right:1px solid var(--b2)}
+.pright{border-left:1px solid var(--b2)}
+.pcenter{background:var(--space);overflow-y:auto;padding:1.2rem;display:flex;flex-direction:column}
+.stitle{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--cyan);border-bottom:1px solid var(--b2);padding-bottom:.4rem;margin-bottom:.8rem}
+.sw{position:relative;width:100%;padding-top:88%}
+.sw canvas{position:absolute;inset:0;width:100%;height:100%}
+.srow{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;gap:.5rem}
+.sname{font-size:.7rem;color:var(--muted);min-width:48px}
+.sbar{flex:1;height:7px;background:rgba(255,255,255,.05);border:1px solid var(--border);overflow:hidden}
+.sbarf{height:100%;transition:width .8s,background .5s}
+.svl{font-family:'Share Tech Mono',monospace;font-size:.63rem;min-width:30px;text-align:right}
+.alert{background:rgba(255,51,85,.1);border:1px solid rgba(255,51,85,.4);padding:.7rem;font-size:.72rem;line-height:1.7;color:#ff8899;animation:ap 2s ease-in-out infinite;display:none}
+.alert.on{display:block}
+@keyframes ap{0%,100%{border-color:rgba(255,51,85,.3)}50%{border-color:rgba(255,51,85,.9)}}
+.evcw{position:relative;width:100%;padding-top:36%;background:var(--panel);border:1px solid var(--b2);margin-bottom:1rem;overflow:hidden;flex-shrink:0}
+.evcw canvas{position:absolute;inset:0;width:100%;height:100%}
+.evov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:1rem;background:linear-gradient(transparent 20%,rgba(6,13,26,.9))}
+.evtitle{font-family:'Orbitron',monospace;font-size:clamp(.9rem,2.5vw,1.5rem);font-weight:700;color:var(--cyan);text-shadow:0 0 20px rgba(0,212,255,.5);margin-bottom:.3rem}
+.evsub{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.12em;color:var(--muted)}
+.chunk{background:var(--panel);border:1px solid var(--b2);padding:.7rem .9rem;margin-bottom:.5rem;font-size:.8rem;line-height:1.8;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s}
+.chunk.on{opacity:1;transform:translateY(0)}
+.clbl{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.2em;color:var(--cyan);margin-bottom:.3rem}
+.chunk strong{color:var(--yellow)}
+.chunk .dr{color:var(--red)}
+.ca{display:none;margin-top:.5rem}
+.calbl{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.2em;color:var(--muted);margin-bottom:.7rem}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.cc{background:var(--panel);border:1px solid var(--b2);padding:.9rem;cursor:pointer;transition:all .2s;text-align:left;position:relative;overflow:hidden}
+.cc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--cyan);transform:scaleX(0);transition:transform .2s;transform-origin:left}
+.cc:hover{border-color:var(--cyan);background:rgba(0,212,255,.05)}
+.cc:hover::before{transform:scaleX(1)}
+.ck{font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:700;color:var(--cyan);opacity:.7;margin-bottom:.4rem}
+.ct{font-size:.8rem;font-weight:500;color:var(--text);margin-bottom:.3rem;line-height:1.5}
+.cs{font-size:.7rem;color:var(--muted);line-height:1.5}
+.cc.ok{border-color:var(--green);background:rgba(0,255,136,.05)}
+.cc.ok::before{background:var(--green);transform:scaleX(1)}
+.cc.ng{border-color:var(--red);background:rgba(255,51,85,.05)}
+.cc.ng::before{background:var(--red);transform:scaleX(1)}
+.fi{background:var(--panel2);border:1px solid var(--border);padding:.7rem;opacity:0;transform:translateX(15px);transition:all .4s;margin-bottom:.5rem}
+.fi.on{opacity:1;transform:translateX(0)}
+.ftime{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--muted);margin-bottom:.2rem}
+.fval{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700}
+.flbl{font-size:.68rem;color:var(--muted);margin-top:.1rem}
+.ftr{font-family:'Share Tech Mono',monospace;font-size:.62rem;margin-top:.25rem}
+.tu{color:var(--red)}.td{color:var(--green)}.ts{color:var(--muted)}
+#result{align-items:center;justify-content:center;padding:3rem 2rem;text-align:center}
+.rship{width:90px;height:90px;margin:0 auto 1.5rem;animation:fl 3s ease-in-out infinite}
+.rgrade{font-family:'Orbitron',monospace;font-size:clamp(3rem,10vw,7rem);font-weight:900;letter-spacing:.1em;margin-bottom:.3rem}
+.rgrade.S{color:var(--cyan);text-shadow:0 0 40px rgba(0,212,255,.6)}
+.rgrade.A{color:var(--green);text-shadow:0 0 30px rgba(0,255,136,.5)}
+.rgrade.B{color:var(--yellow)}
+.rgrade.C{color:var(--orange)}
+.rgrade.D{color:var(--red)}
+.rsub{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.3em;color:var(--muted);margin-bottom:2rem}
+.rmets{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--b2);max-width:660px;width:100%;margin:0 auto 1.5rem}
+.rm{background:var(--panel);padding:1.2rem .8rem}
+.rmv{font-family:'Orbitron',monospace;font-size:1.6rem;font-weight:700;margin-bottom:.25rem}
+.rml{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.12em;color:var(--muted)}
+.ran{background:var(--panel);border:1px solid var(--b2);padding:1.2rem;max-width:660px;width:100%;margin:0 auto 1.5rem;text-align:left}
+.arow{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.8rem}
+.arow:last-child{border-bottom:none}
+.abw{width:90px;height:5px;background:rgba(255,255,255,.05);overflow:hidden}
+.ab{height:100%;background:var(--cyan);transition:width 1.2s ease}
+.btnr{background:transparent;color:var(--cyan);border:1px solid var(--cyan);padding:.9rem 2.5rem;font-family:'Orbitron',monospace;font-size:.75rem;letter-spacing:.15em;cursor:pointer;transition:all .3s;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%)}
+.btnr:hover{background:var(--cyan);color:var(--bg)}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(60px);padding:.7rem 1.8rem;font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.1em;border:1px solid;opacity:0;transition:all .3s;z-index:999;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);backdrop-filter:blur(10px)}
+.toast.on{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.g{background:rgba(0,255,136,.1);border-color:var(--green);color:var(--green)}
+.toast.b{background:rgba(255,51,85,.1);border-color:var(--red);color:var(--red)}
+.toast.i{background:rgba(0,212,255,.1);border-color:var(--cyan);color:var(--cyan)}
+.scanline{position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.025) 2px,rgba(0,0,0,.025) 4px)}
+@media(max-width:768px){.glayout{grid-template-columns:1fr;height:auto}.pleft,.pright{display:none}.cgrid{grid-template-columns:1fr}.rmets{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="sf"></div>
+<div class="scanline"></div>
+<div class="toast" id="toast"></div>
+
+<div class="screen active" id="intro">
+<div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem">
+<div class="ship-wrap"><div class="glow"></div>
+<svg viewBox="0 0 140 140" fill="none" width="140" height="140">
+<defs><filter id="gw"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<ellipse cx="70" cy="112" rx="14" ry="5" fill="#00aaff" opacity=".3" filter="url(#gw)"><animate attributeName="ry" values="5;10;5" dur=".8s" repeatCount="indefinite"/><animate attributeName="opacity" values=".3;.7;.3" dur=".8s" repeatCount="indefinite"/></ellipse>
+<path d="M70 14 L91 70 L84 98 L70 105 L56 98 L49 70 Z" fill="#0a2a4a" stroke="#00d4ff" stroke-width="1.5" filter="url(#gw)"/>
+<path d="M49 70 L21 91 L42 84 L56 98 Z" fill="#062040" stroke="#0099cc" stroke-width="1"/>
+<path d="M91 70 L119 91 L98 84 L84 98 Z" fill="#062040" stroke="#0099cc" stroke-width="1"/>
+<ellipse cx="70" cy="46" rx="12" ry="16" fill="#001a33" stroke="#00d4ff" stroke-width="1"/>
+<ellipse cx="70" cy="44" rx="8" ry="10" fill="#0044aa" opacity=".6"/>
+<circle cx="70" cy="80" r="5" fill="none" stroke="#00d4ff" stroke-width="1" opacity=".5"/>
+<circle cx="70" cy="80" r="3" fill="#00aaff" opacity=".4"><animate attributeName="opacity" values=".4;.9;.4" dur="1.5s" repeatCount="indefinite"/></circle>
+<rect x="62" y="100" width="16" height="9" rx="2" fill="#0a2a4a" stroke="#0099cc" stroke-width="1"/>
+<path d="M62 108 L67 126 L70 119 L73 126 L78 108 Z" fill="url(#fl)" opacity=".85"><animate attributeName="d" values="M62 108 L67 126 L70 119 L73 126 L78 108 Z;M63 108 L68 122 L70 116 L72 122 L77 108 Z;M62 108 L67 126 L70 119 L73 126 L78 108 Z" dur=".3s" repeatCount="indefinite"/></path>
+<defs><linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00d4ff"/><stop offset="100%" stop-color="#0000ff" stop-opacity="0"/></linearGradient></defs>
+</svg></div>
+<div class="ititle">APEX SPACE</div>
+<div class="isub">CRISIS MANAGEMENT SIMULATION / ASSESSMENT v2.0</div>
+<p class="idesc">宇宙船 <strong style="color:var(--cyan)">PROMETHEUS-7</strong> の艦長として連続する危機に対応せよ。<br>情報はリアルタイムで出現する。スクショは意味がない。<br>あなたの思考プロセスそのものが評価される。</p>
+<div class="badges">
+<span class="badge">情報が時系列で出現</span>
+<span class="badge">AI突破不可設計</span>
+<span class="badge">リアルタイム計測</span>
+<span class="badge">4ミッション連続</span>
+</div>
+<button class="btn-start" onclick="go()">▶ MISSION START</button>
+</div></div>
+
+<div class="screen" id="diff-select">
+<div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;text-align:center">
+<div style="font-family:'Orbitron',monospace;font-size:clamp(1.5rem,4vw,3rem);font-weight:900;color:var(--cyan);margin-bottom:.5rem">SELECT DIFFICULTY</div>
+<div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.3em;color:var(--muted);margin-bottom:3rem">難易度を選択してください</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:700px;width:100%">
+<div onclick="startWithDiff('standard')" style="background:var(--panel);border:1px solid var(--b2);padding:2.5rem;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--b2)'">
+<div style="font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;color:var(--green);margin-bottom:1rem">STANDARD</div>
+<div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--muted);margin-bottom:1rem">中小企業 一般職向け</div>
+<div style="font-size:.8rem;line-height:1.8;color:rgba(200,232,255,.7)">判断系4本＋言語1本<br>合計5ミッション</div>
+<div style="margin-top:1.5rem;font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--green)">▶ START</div>
+</div>
+<div onclick="startWithDiff('hard')" style="background:var(--panel);border:1px solid var(--b2);padding:2.5rem;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='var(--b2)'">
+<div style="font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;color:var(--red);margin-bottom:1rem">HARD</div>
+<div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--muted);margin-bottom:1rem">大手・外資・コンサル向け</div>
+<div style="font-size:.8rem;line-height:1.8;color:rgba(200,232,255,.7)">判断系4本＋言語2本<br>合計6ミッション</div>
+<div style="margin-top:1.5rem;font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--red)">▶ START</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen" id="game">
+<div class="hud">
+<div><div class="hlogo">APEX SPACE</div><div class="hmis" id="mislbl">MISSION 1 / 4</div></div>
+<div class="hright">
+<div><div class="tval" id="timer">3:00</div><div class="tlbl">TIME</div></div>
+<div><div class="sval" id="score">0</div><div class="slbl">SCORE</div></div>
+</div></div>
+<div class="prog"><div class="progf" id="prog" style="width:0%"></div></div>
+<div class="glayout">
+<div class="pleft">
+<div><div class="stitle">▶ SHIP STATUS</div><div class="sw"><canvas id="scv"></canvas></div></div>
+<div><div class="stitle">▶ SYSTEMS</div><div id="slist"></div></div>
+<div class="alert" id="abox"><strong>⚠ ALERT</strong><br><span id="atxt"></span></div>
+</div>
+<div class="pcenter"><div id="evs"></div></div>
+<div class="pright"><div class="stitle">▶ DATA FEED</div><div id="feed"></div></div>
+</div></div>
+
+<div class="screen" id="result">
+<div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;text-align:center">
+<svg class="rship" viewBox="0 0 140 140" fill="none"><path d="M70 14 L91 70 L84 98 L70 105 L56 98 L49 70 Z" fill="#0a2a4a" stroke="#00d4ff" stroke-width="1.5"/><path d="M49 70 L21 91 L42 84 L56 98 Z" fill="#062040" stroke="#0099cc" stroke-width="1"/><path d="M91 70 L119 91 L98 84 L84 98 Z" fill="#062040" stroke="#0099cc" stroke-width="1"/><ellipse cx="70" cy="46" rx="12" ry="16" fill="#001a33" stroke="#00d4ff" stroke-width="1"/></svg>
+<div class="rgrade" id="rg">A</div>
+<div class="rsub" id="rs">MISSION DEBRIEF</div>
+<div class="rmets" id="rm"></div>
+<div class="ran" id="ra"></div>
+<button class="btnr" onclick="restart()">▶ RETRY MISSION</button>
+</div></div>
+
+<script>
+(function(){const sf=document.getElementById('sf');for(let i=0;i<160;i++){const s=document.createElement('div');s.className='star';const z=Math.random()*2+.4;s.style.cssText=`width:${z}px;height:${z}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${Math.random()*3+2}s;animation-delay:${Math.random()*3}s`;sf.appendChild(s)}})();
+
+const MS=[
+{id:1,title:'エンジン過熱',sub:'CRITICAL — ENGINE OVERHEAT',bg:'fire',t:180,
+sys:{hull:85,oxygen:100,engine:20,shields:70,comms:100},
+al:'エンジンブロックBが臨界温度を超過。冷却システム障害。',
+ch:[
+{d:0,l:'◉ 初期報告 T+0sec',x:'エンジン温度が<strong>820°C</strong>（臨界値750°C）超過。自動冷却は<span class="dr">機能不全</span>。'},
+{d:4500,l:'◉ 追加データ T+4sec',x:'原因：冷却剤パイプに<strong>微細クラック</strong>。修復には<strong>予備部品C-7</strong>が必要。在庫1個。'},
+{d:9000,l:'◉ 緊急警報 T+9sec',x:'放置すると<strong>8分後</strong>にエンジン爆発リスク。乗員<strong>12名全員</strong>が危険にさらされる。'},
+{d:14000,l:'◉ 副操縦士報告 T+14sec',x:'緊急出力低下で速度<strong>40%減</strong>。目的地到達が<strong>3日延長</strong>。乗員は全員安全確保可能。'},
+],
+cs:[
+{k:'A',t:'エンジンを即座に停止し、冷却修復を最優先にする',s:'乗員の安全最優先。航行は3日遅延。',ok:true,r:'人命最優先の正しい判断。3日の遅延より乗員12名の命が優先される。'},
+{k:'B',t:'出力50%に下げながら航行継続、並行修復する',s:'時間を稼ぎつつ修復。失敗リスクあり。',ok:false,r:'中途半端な対応。修復失敗時に最悪の事態を招く可能性が高い。'},
+{k:'C',t:'冷却剤を全量投入して強制冷却する',s:'短期間は温度を下げられるが冷却剤残量がゼロに。',ok:false,r:'将来の緊急時に冷却剤がなくなる。短期解決が長期リスクを生む典型例。'},
+{k:'D',t:'本部に緊急連絡し、指示を待つ',s:'通信遅延3分。その間も温度は上昇し続ける。',ok:false,r:'現場判断が求められる緊急局面での判断放棄は最悪の選択。'},
+],
+fd:[{d:0,v:'820°C',l:'ENGINE TEMP',tr:'up',c:'#ff3355'},{d:3500,v:'12名',l:'CREW AT RISK',tr:'s',c:'#ffdd00'},{d:8000,v:'1個',l:'SPARE C-7',tr:'s',c:'#00d4ff'},{d:12000,v:'8分',l:'TO CRITICAL',tr:'dn',c:'#ff8800'}]},
+{id:2,title:'酸素システム障害',sub:'WARNING — LIFE SUPPORT FAILURE',bg:'oxygen',t:180,
+sys:{hull:85,oxygen:35,engine:90,shields:70,comms:100},
+al:'酸素生成モジュール38%稼働。12時間で酸素枯渇の恐れ。',
+ch:[
+{d:0,l:'◉ システム警告 T+0sec',x:'酸素生成モジュールの稼働率が<strong>38%</strong>に低下。原因は<span class="dr">藻類バイオリアクターの汚染</span>。'},
+{d:5000,l:'◉ 分析結果 T+5sec',x:'汚染源：食料区画からの<strong>有機物漏出</strong>。修復には<strong>6時間</strong>必要。その間も酸素は低下し続ける。'},
+{d:10000,l:'◉ 追加報告 T+10sec',x:'冷凍睡眠カプセルを<strong>8名分</strong>起動すれば酸素消費量を<strong>60%削減</strong>できる。起動に<strong>2時間</strong>必要。'},
+{d:16000,l:'◉ 重大情報 T+16sec',x:'最寄り補給ステーションまで<strong>18時間</strong>。酸素の自然枯渇は<strong>12時間後</strong>の見込み。到達前に枯渇する。'},
+],
+cs:[
+{k:'A',t:'全乗員を今すぐ冷凍睡眠に入れ、酸素消費を最小化',s:'安全だが緊急対応能力がゼロになる。',ok:false,r:'全員眠ると次の緊急事態に誰も対応できない。修復作業も不可能になる。'},
+{k:'B',t:'修復班4名のみ起こして修復、残り8名を冷凍睡眠へ',s:'酸素節約と修復を並行。最もバランスが良い。',ok:true,r:'必要最小限の人員で修復しながら酸素消費を抑える最適解。'},
+{k:'C',t:'全員起こしたまま修復を急ぎ6時間での完了を目指す',s:'最速だが酸素消費が続き失敗時に全員危険。',ok:false,r:'修復が遅れた場合のリスクが極めて高い。全員の命を賭けるリスクは取れない。'},
+{k:'D',t:'補給ステーションへ全速力で向かい外部補給を待つ',s:'18時間かかり、12時間での枯渇に間に合わない。',ok:false,r:'単純計算で間に合わない。データを正確に読めていない判断。'},
+],
+fd:[{d:0,v:'38%',l:'O2 PRODUCTION',tr:'dn',c:'#00d4ff'},{d:4000,v:'12h',l:'O2 REMAINING',tr:'dn',c:'#ffdd00'},{d:8500,v:'18h',l:'STATION ETA',tr:'s',c:'#ff8800'},{d:13000,v:'60%',l:'CRYO REDUCTION',tr:'s',c:'#00ff88'}]},
+{id:3,title:'未知の信号を受信',sub:'UNKNOWN — UNIDENTIFIED SIGNAL',bg:'signal',t:180,
+sys:{hull:85,oxygen:100,engine:90,shields:40,comms:100},
+al:'未知発信源から強力な電磁波信号を受信。正体不明。',
+ch:[
+{d:0,l:'◉ 信号解析 T+0sec',x:'信号は<strong>パターン化された繰り返し</strong>を持つ。ランダムノイズではない。発信源は<strong>前方3万km</strong>。'},
+{d:5000,l:'◉ 追加解析 T+5sec',x:'周波数帯が<strong>60年前の人類通信規格</strong>に一致。行方不明の<strong>探索船ARES-3</strong>の識別コードを含む。'},
+{d:10000,l:'◉ センサー報告 T+10sec',x:'発信源付近に<strong>熱源反応</strong>あり。生命反応の可能性は<strong>23%</strong>。接近するとシールドが<span class="dr">20%低下</span>する。'},
+{d:16000,l:'◉ 本部交信 T+16sec',x:'ARES-3の捜索は<strong>40年前に打ち切り</strong>。生存者がいる場合の救助は義務。宇宙嵐リスク：12時間以内に<strong>70%</strong>。'},
+],
+cs:[
+{k:'A',t:'シールドを維持しながら距離を保ち信号解析を続ける',s:'安全優先。生存者がいても助けられない。',ok:false,r:'情報収集は正しいが宇宙嵐前に決断が必要。猶予がない状況での回避は責任放棄。'},
+{k:'B',t:'シールド低下を承知で接近し生存者の有無を確認する',s:'リスクを取って人道的責任を果たす。',ok:true,r:'23%でも生存者がいる可能性がある中、確認せず離脱するのは人道的責任の放棄。'},
+{k:'C',t:'即座に方向転換し嵐を避けて安全な宇宙域に退避',s:'乗員の安全を最優先。ARES-3は諦める。',ok:false,r:'生存者確認すらしない判断。人道的観点から問題がある。'},
+{k:'D',t:'シールドを全出力にして接近、救助を最優先にする',s:'シールド強化で電磁波を相殺できるがエネルギー激増。',ok:false,r:'他のシステムへの影響が大きすぎる。バランスを欠いた判断。'},
+],
+fd:[{d:0,v:'23%',l:'LIFE SIGNAL',tr:'s',c:'#aa44ff'},{d:4000,v:'40%',l:'SHIELD LEVEL',tr:'dn',c:'#ffdd00'},{d:9000,v:'70%',l:'STORM RISK',tr:'up',c:'#ff3355'},{d:14000,v:'60yr',l:'ARES-3 AGO',tr:'s',c:'#00d4ff'}]},
+{id:4,title:'乗員による反乱',sub:'CRITICAL — CREW MUTINY DETECTED',bg:'mutiny',t:180,
+sys:{hull:85,oxygen:100,engine:90,shields:80,comms:60},
+al:'乗員3名が武装して艦橋へ向かっている。通信の一部が遮断。',
+ch:[
+{d:0,l:'◉ 艦橋報告 T+0sec',x:'エンジニア班の<strong>3名</strong>が艦橋に向かっている。要求は「<strong>ミッション中止と即時帰還</strong>」。'},
+{d:5000,l:'◉ 背景情報 T+5sec',x:'行動理由：先月の任務変更で<strong>帰還が6ヶ月延長</strong>。3名とも<strong>家族に重大な問題</strong>を抱えている。'},
+{d:10000,l:'◉ 追加状況 T+10sec',x:'残り乗員<strong>9名のうち5名</strong>が3名の訴えに同情的。全面衝突になれば船内統制が<span class="dr">崩壊</span>する可能性。'},
+{d:16000,l:'◉ 通信傍受 T+16sec',x:'傍受した会話：3名は<strong>「暴力は避けたい」</strong>と話している。<strong>交渉の余地あり</strong>。ただし今も艦橋に接近中。'},
+],
+cs:[
+{k:'A',t:'セキュリティで艦橋をロックし3名を物理的に隔離する',s:'制御を確保。しかし5名の同情者が行動に出る可能性。',ok:false,r:'力による制圧は根本解決にならず、5名の同情者が反応する可能性が高い。'},
+{k:'B',t:'全乗員を集めたミーティングを開き状況を透明に共有する',s:'対話で解決。傍受情報を活用した最善手。',ok:true,r:'「暴力は避けたい」という傍受情報を活用。透明な対話が最も持続可能な解決策。'},
+{k:'C',t:'3名のリーダーと1対1で交渉し個別に説得する',s:'個別対応で感情的な訴えに応える。',ok:false,r:'他の9名を無視した対応。集団の問題を個人交渉で解決しようとすることで分断が深まる。'},
+{k:'D',t:'本部に連絡しミッション変更権限を要請する',s:'根本的な問題を解決できる可能性がある。',ok:false,r:'通信に時間がかかり、3名は今も接近中。現在の緊急事態への対応にならない。'},
+],
+fd:[{d:0,v:'3名',l:'MUTINEERS',tr:'s',c:'#ff3355'},{d:4000,v:'5/9',l:'SYMPATHIZERS',tr:'up',c:'#ff8800'},{d:9000,v:'60%',l:'COMMS BLOCKED',tr:'dn',c:'#ffdd00'},{d:14000,v:'LOW',l:'VIOLENCE RISK',tr:'s',c:'#00ff88'}]}
+];
+
+const S={i:0,sc:[],tmr:null,tl:0,done:false,tot:0,dt:[],rt:[],ft:[],ms:0};
+const $=id=>document.getElementById(id);
+function ss(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0)}
+function toast(msg,type='i'){const t=$('toast');t.textContent=msg;t.className='toast '+type+' on';setTimeout(()=>t.classList.remove('on'),2800)}
+function fmt(s){return`${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`}
+
+let bgR,shR;
+function drawBg(cv,type){
+  const c=cv.getContext('2d'),w=cv.width=cv.offsetWidth||400,h=cv.height=cv.offsetHeight||150,t=Date.now()/1000;
+  c.clearRect(0,0,w,h);
+  if(type==='fire'){
+    const g=c.createLinearGradient(0,0,w,h);g.addColorStop(0,'#1a0208');g.addColorStop(1,'#1a0805');c.fillStyle=g;c.fillRect(0,0,w,h);
+    for(let i=0;i<10;i++){const x=Math.random()*w,y=h*.4+Math.random()*h*.6,r=Math.random()*12+4,g2=c.createRadialGradient(x,y,0,x,y,r);g2.addColorStop(0,'rgba(255,80,0,.3)');g2.addColorStop(1,'transparent');c.fillStyle=g2;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill()}
+    c.font=`bold ${Math.min(w,h)*.11}px Orbitron,monospace`;c.fillStyle=`rgba(255,51,85,${.04+Math.sin(t*2)*.02})`;c.textAlign='center';c.fillText('OVERHEAT',w/2,h*.6);
+  }else if(type==='oxygen'){
+    const g=c.createLinearGradient(0,0,0,h);g.addColorStop(0,'#020d1a');g.addColorStop(1,'#020810');c.fillStyle=g;c.fillRect(0,0,w,h);
+    for(let i=0;i<10;i++){const x=Math.random()*w,y=Math.random()*h,r=Math.random()*6+2,g2=c.createRadialGradient(x,y,0,x,y,r);g2.addColorStop(0,'rgba(0,180,255,.2)');g2.addColorStop(1,'transparent');c.fillStyle=g2;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill()}
+    const bw=w*.5,bh=14,bx=(w-bw)/2,by=h*.75;c.fillStyle='rgba(0,212,255,.08)';c.fillRect(bx,by,bw,bh);c.fillStyle='rgba(0,212,255,.3)';c.fillRect(bx,by,bw*.38,bh);c.strokeStyle='rgba(0,212,255,.2)';c.strokeRect(bx,by,bw,bh);
+    c.font='11px Share Tech Mono,monospace';c.fillStyle='rgba(0,212,255,.5)';c.textAlign='center';c.fillText('O2 LEVEL: 38%',w/2,by-5);
+  }else if(type==='signal'){
+    const g=c.createRadialGradient(w/2,h/2,0,w/2,h/2,Math.max(w,h)/2);g.addColorStop(0,'#100520');g.addColorStop(1,'#020408');c.fillStyle=g;c.fillRect(0,0,w,h);
+    for(let i=0;i<5;i++){const r=((i*60+t*30)%(Math.max(w,h)*.7));c.beginPath();c.arc(w/2,h/2,r,0,Math.PI*2);c.strokeStyle=`rgba(170,68,255,${Math.max(0,.25-r/Math.max(w,h)*.25)})`;c.lineWidth=1;c.stroke()}
+  }else{
+    const g=c.createLinearGradient(0,0,w,h);g.addColorStop(0,'#120a00');g.addColorStop(1,'#08040a');c.fillStyle=g;c.fillRect(0,0,w,h);
+    for(let i=0;i<5;i++){c.beginPath();c.moveTo(Math.random()*w,0);c.lineTo(Math.random()*w,h);c.strokeStyle=`rgba(255,136,0,${Math.random()*.07})`;c.lineWidth=1;c.stroke()}
+  }
+}
+function drawShip(cv,sys){
+  const c=cv.getContext('2d'),w=cv.width=cv.offsetWidth||220,h=cv.height=cv.offsetHeight||220;
+  c.clearRect(0,0,w,h);c.fillStyle='#020810';c.fillRect(0,0,w,h);
+  c.strokeStyle='rgba(0,212,255,.04)';c.lineWidth=.5;
+  for(let x=0;x<w;x+=16){c.beginPath();c.moveTo(x,0);c.lineTo(x,h);c.stroke()}
+  for(let y=0;y<h;y+=16){c.beginPath();c.moveTo(0,y);c.lineTo(w,y);c.stroke()}
+  const cx=w/2,cy=h*.42,sc=Math.min(w,h)*.0025;
+  c.fillStyle='rgba(0,100,255,.2)';c.beginPath();c.arc(cx,cy+55*sc,35*sc,0,Math.PI*2);c.fill();
+  c.strokeStyle='#00d4ff';c.lineWidth=1.5;c.fillStyle='#0a2a4a';
+  c.beginPath();c.moveTo(cx,cy-50*sc);c.lineTo(cx+28*sc,cy+18*sc);c.lineTo(cx+18*sc,cy+48*sc);c.lineTo(cx,cy+57*sc);c.lineTo(cx-18*sc,cy+48*sc);c.lineTo(cx-28*sc,cy+18*sc);c.closePath();c.fill();c.stroke();
+  c.fillStyle='#062040';c.strokeStyle='#0099cc';c.lineWidth=1;
+  c.beginPath();c.moveTo(cx-28*sc,cy+18*sc);c.lineTo(cx-58*sc,cy+42*sc);c.lineTo(cx-40*sc,cy+35*sc);c.lineTo(cx-18*sc,cy+48*sc);c.closePath();c.fill();c.stroke();
+  c.beginPath();c.moveTo(cx+28*sc,cy+18*sc);c.lineTo(cx+58*sc,cy+42*sc);c.lineTo(cx+40*sc,cy+35*sc);c.lineTo(cx+18*sc,cy+48*sc);c.closePath();c.fill();c.stroke();
+  const cols={hull:sys.hull>60?'#00ff88':sys.hull>30?'#ffdd00':'#ff3355',oxygen:sys.oxygen>60?'#00d4ff':sys.oxygen>30?'#ffdd00':'#ff3355',engine:sys.engine>60?'#00ff88':sys.engine>30?'#ffdd00':'#ff3355'};
+  [{x:cx-16*sc,y:cy,cl:cols.hull},{x:cx,y:cy-20*sc,cl:cols.oxygen},{x:cx+16*sc,y:cy,cl:cols.engine}].forEach(d=>{c.shadowColor=d.cl;c.shadowBlur=8;c.fillStyle=d.cl;c.beginPath();c.arc(d.x,d.y,4,0,Math.PI*2);c.fill();c.shadowBlur=0});
+  const fh=(.55+Math.random()*.45)*22*sc,fg=c.createLinearGradient(cx,cy+57*sc,cx,cy+57*sc+fh);fg.addColorStop(0,'rgba(0,212,255,.9)');fg.addColorStop(1,'transparent');c.fillStyle=fg;c.beginPath();c.moveTo(cx-8*sc,cy+57*sc);c.lineTo(cx,cy+57*sc+fh);c.lineTo(cx+8*sc,cy+57*sc);c.closePath();c.fill();
+}
+
+function updSys(sys){
+  const n={hull:'船体',oxygen:'酸素',engine:'エンジン',shields:'シールド',comms:'通信'};
+  $('slist').innerHTML=Object.entries(sys).map(([k,v])=>{const cl=v>60?'#00ff88':v>30?'#ffdd00':'#ff3355';return`<div class="srow"><span class="sname">${n[k]}</span><div class="sbar"><div class="sbarf" style="width:${v}%;background:${cl}"></div></div><span class="svl" style="color:${cl}">${v}%</span></div>`}).join('')}
+
+function addFeed(item){
+  const f=$('feed'),tc=item.tr==='up'?'tu':item.tr==='dn'?'td':'ts',ti=item.tr==='up'?'▲ 上昇':item.tr==='dn'?'▼ 低下':'— 安定',el=document.createElement('div');
+  el.className='fi';el.innerHTML=`<div class="ftime">${new Date().toLocaleTimeString('ja')}</div><div class="fval" style="color:${item.c}">${item.v}</div><div class="flbl">${item.l}</div><div class="ftr ${tc}">${ti}</div>`;
+  f.insertBefore(el,f.firstChild);setTimeout(()=>el.classList.add('on'),50);
+}
+
+
+const LM=[
+{id:5,title:'宇宙理事会 緊急会議録',sub:'LANGUAGE — 文書読解＆意図分析',bg:'signal',t:200,
+sys:{hull:85,oxygen:100,engine:90,shields:70,comms:80},
+al:'宇宙理事会から極秘会議録が届いた。発言の真意を読み取れ。',
+ch:[
+{d:0,l:'◉ 文書受信 T+0sec',x:'【宇宙理事会 第447回緊急会議録】<br>議長：「今回の<strong>エネルギー配分問題</strong>については、全加盟星系の意見を尊重した上で慎重に判断したい」'},
+{d:5000,l:'◉ 続き T+5sec',x:'A星系代表：「我々は3期連続でエネルギー割当が<strong>平均より12%低い</strong>。今回こそ是正を求める」<br>議長：「ご意見はよく理解しました。<strong>次回会議で改めて検討</strong>します」'},
+{d:11000,l:'◉ 続き T+11sec',x:'B星系代表：「議長、次回とはいつですか」<br>議長：「<strong>状況を見ながら適切なタイミングで</strong>設定します。本日はここまでとします」<br>【会議終了】'},
+{d:17000,l:'◉ 分析指示 T+17sec',x:'任務：この会議録を読み、<strong>議長の真の意図</strong>として最も正確なものを選べ。'},
+],
+cs:[
+{k:'A',t:'議長はA星系の要求を真剣に受け止め、次回会議で是正する意向だ',s:'議長の発言を額面通りに受け取った解釈。',ok:false,r:'「次回会議で検討」「状況を見ながら」は典型的な先送り表現。真剣な是正意図とは読み取れない。'},
+{k:'B',t:'議長はA星系の要求を事実上拒否し、問題を先送りにしている',s:'発言の行間を読んだ解釈。',ok:true,r:'「慎重に判断」「次回で検討」「適切なタイミングで」は責任回避の典型表現。問題を先送りにする意図が明確に読み取れる。'},
+{k:'C',t:'B星系がA星系の要求を妨害しようとしている',s:'B星系の質問を妨害と解釈した。',ok:false,r:'B星系の質問は妨害ではなく、議長の先送りを追及している。文脈を正確に読めていない。'},
+{k:'D',t:'会議録の情報だけでは議長の意図は判断できない',s:'情報不足として判断を保留した。',ok:false,r:'十分な文脈がある。「判断できない」は思考停止であり、ビジネス現場では通用しない。'},
+],
+fd:[
+{d:0,v:'3期',l:'UNDERFUNDED',tr:'up',c:'#ff3355'},
+{d:5000,v:'-12%',l:'ENERGY DEFICIT',tr:'dn',c:'#ffdd00'},
+{d:11000,v:'先送り',l:'DECISION',tr:'stable',c:'#ff8800'},
+{d:16000,v:'LOW',l:'RESOLUTION',tr:'dn',c:'#aa44ff'},
+]},
+{id:6,title:'宇宙企業 合併交渉メモ',sub:'LANGUAGE — 高難度・矛盾情報分析',bg:'mutiny',t:210,
+sys:{hull:75,oxygen:100,engine:90,shields:60,comms:90},
+al:'極秘の合併交渉メモが流出。矛盾する3つの文書から真実を見抜け。',
+ch:[
+{d:0,l:'◉ メモA受信 T+0sec',x:'【NEXUS社 社内メモ】<br>「ORION社との合併交渉は<strong>順調に進展</strong>している。来月中の合意を目指す。株主への報告は合意後に行う予定」'},
+{d:6000,l:'◉ メモB受信 T+6sec',x:'【ORION社 取締役会議事録 同日付】<br>「NEXUS社との交渉：先方の<strong>企業評価額に大きな乖離</strong>があり、現時点での合意は困難。交渉継続か否かを<strong>再検討</strong>する必要がある」'},
+{d:13000,l:'◉ ニュース受信 T+13sec',x:'【宇宙経済ニュース 翌日】<br>NEXUS社CEO：<strong>「複数の戦略的パートナーシップを積極的に検討中」</strong>。具体的な社名は明かさず。株価は3%上昇。'},
+{d:19000,l:'◉ 判断指示 T+19sec',x:'3つの文書を総合して判断せよ。<strong>現在の合併交渉の実態</strong>として最も正確なものを選べ。'},
+],
+cs:[
+{k:'A',t:'合併交渉は順調で来月中に合意する可能性が高い',s:'メモAの内容を信じた判断。',ok:false,r:'メモAはNEXUS社の社内メモ。同日のORION社議事録では「合意は困難」と真逆の認識。一次情報を鵜呑みにしてはいけない。'},
+{k:'B',t:'両社の認識に大きな乖離があり、交渉は実態として難航している',s:'複数の文書を照合した判断。',ok:true,r:'NEXUS社は「順調」、ORION社は「困難」と真逆の認識。CEOの曖昧な発言も合わせると交渉は難航していると判断するのが正確。'},
+{k:'C',t:'NEXUS社が意図的に情報を隠蔽しており、不正が疑われる',s:'メモAの楽観的な表現を隠蔽と解釈した。',ok:false,r:'情報の乖離はあるが、それだけで不正と断定するのは飛躍しすぎ。各社が自社に有利な情報を出すのは通常のビジネス行動。'},
+{k:'D',t:'CEOの発言からNEXUS社はORION社以外も交渉しており優先候補ではない',s:'ニュース記事だけを重視した判断。',ok:false,r:'「複数の戦略的パートナーシップ」は合併以外の提携も含む可能性がある。この発言だけで断定できない。'},
+],
+fd:[
+{d:0,v:'乖離大',l:'VALUATION GAP',tr:'up',c:'#ff3355'},
+{d:6000,v:'再検討',l:'ORION STATUS',tr:'dn',c:'#ffdd00'},
+{d:13000,v:'曖昧',l:'CEO STATEMENT',tr:'stable',c:'#ff8800'},
+{d:18000,v:'HIGH',l:'INFO CONFLICT',tr:'up',c:'#aa44ff'},
+]}
+];
+
+let DIFF='standard';
+let AMR=[];
+
+function go(){ss('diff-select')}
+
+function startWithDiff(d){
+  DIFF=d;
+  AMR=d==='hard'?[...MS,...LM]:[...MS,LM[0]];
+  ss('game');S.i=0;S.sc=[];S.tot=0;S.dt=[];$('score').textContent='0';
+  $('mislbl').textContent='MISSION 1 / '+AMR.length;
+  loadAM(0);
+}
+
+function loadAM(i){
+  if(i>=AMR.length){showRes();return}
+  const m=AMR[i];
+  S.done=false;S.ms=Date.now();
+  S.rt.forEach(clearTimeout);S.rt=[];S.ft.forEach(clearTimeout);S.ft=[];
+  $('mislbl').textContent='MISSION '+(i+1)+' / '+AMR.length;
+  $('prog').style.width=((i/AMR.length)*100)+'%';
+  updSys(m.sys);
+  const ab=$('abox');ab.className='alert on';$('atxt').textContent=m.al;
+  $('feed').innerHTML='';
+  const evs=$('evs');
+  evs.innerHTML='<div class="evcw"><canvas id="bcv"></canvas><div class="evov"><div class="evtitle">'+m.title+'</div><div class="evsub">'+m.sub+'</div></div></div><div id="ir"></div><div class="ca" id="ca"><div class="calbl">&#9658; SELECT YOUR DECISION</div><div class="cgrid" id="cg"></div></div>';
+  cancelAnimationFrame(bgR);cancelAnimationFrame(shR);
+  const bcv=$('bcv'),scv=$('scv');
+  function abg(){drawBg(bcv,m.bg);bgR=requestAnimationFrame(abg)}abg();
+  function ash(){drawShip(scv,m.sys);shR=requestAnimationFrame(ash)}ash();
+  const ir=$('ir');
+  m.ch.forEach((c,idx)=>{
+    const t=setTimeout(()=>{
+      const el=document.createElement('div');el.className='chunk';el.innerHTML='<div class="clbl">'+c.l+'</div>'+c.x;ir.appendChild(el);setTimeout(()=>el.classList.add('on'),50);
+      if(idx===m.ch.length-1)setTimeout(()=>showC(m),800);
+    },c.d);S.rt.push(t);
+  });
+  m.fd.forEach(item=>{const t=setTimeout(()=>addFeed(item),item.d);S.ft.push(t)});
+  clearInterval(S.tmr);S.tl=m.t;$('timer').textContent=fmt(S.tl);$('timer').className='tval';
+  S.tmr=setInterval(()=>{
+    S.tl--;$('timer').textContent=fmt(S.tl);
+    const tv=$('timer');if(S.tl<=30)tv.className='tval danger';else if(S.tl<=60)tv.className='tval warn';
+    if(S.tl<=0){clearInterval(S.tmr);if(!S.done)toOutAM(m)}
+  },1000);
+}
+
+function toOutAM(m){S.done=true;S.sc.push({ok:false,pts:0,dt:m.t});toast('TIME OUT','b');setTimeout(()=>{S.i++;loadAM(S.i)},1500)}
+
+function ansAM(idx){
+  if(S.done)return;S.done=true;clearInterval(S.tmr);
+  const m=AMR[S.i],c=m.cs[idx],dt=(Date.now()-S.ms)/1000;S.dt.push(dt);
+  document.querySelectorAll('.cc').forEach((el,i)=>{el.style.pointerEvents='none';if(m.cs[i].ok)el.classList.add('ok');if(i===idx&&!c.ok)el.classList.add('ng')});
+  let pts=0;if(c.ok){pts=Math.round(70+(S.tl/m.t)*30);toast('&#10003; '+c.r,'g')}else{pts=Math.round((S.tl/m.t)*20);toast('&#10007; '+c.r,'b')}
+  S.sc.push({ok:c.ok,pts,dt});S.tot=Math.round(S.sc.reduce((a,b)=>a+b.pts,0)/AMR.length);$('score').textContent=S.tot;
+  const el=document.createElement('div');el.className='chunk';el.innerHTML='<div class="clbl">&#9654; 解説</div>'+c.r;
+  setTimeout(()=>{const ir=$('ir');if(ir){ir.appendChild(el);setTimeout(()=>el.classList.add('on'),50)}},600);
+  setTimeout(()=>{S.i++;const nx=AMR[S.i];if(nx){toast('MISSION '+S.i+' COMPLETE','i');setTimeout(()=>loadAM(S.i),1200)}else setTimeout(()=>showRes(),1200)},2800);
+}
+
+function restart(){S.i=0;S.sc=[];S.tot=0;S.dt=[];AMR=[];go()}
+
+function loadM(i){
+  if(i>=MS.length){showRes();return}
+  const m=MS[i];S.done=false;S.ms=Date.now();
+  S.rt.forEach(clearTimeout);S.rt=[];S.ft.forEach(clearTimeout);S.ft=[];
+  $('mislbl').textContent=`MISSION ${m.id} / ${MS.length}`;
+  $('prog').style.width=`${(i/MS.length)*100}%`;
+  updSys(m.sys);
+  const ab=$('abox');ab.className='alert on';$('atxt').textContent=m.al;
+  $('feed').innerHTML='';
+  const evs=$('evs');
+  evs.innerHTML=`<div class="evcw"><canvas id="bcv"></canvas><div class="evov"><div class="evtitle">${m.title}</div><div class="evsub">${m.sub}</div></div></div><div id="ir"></div><div class="ca" id="ca"><div class="calbl">▶ SELECT YOUR DECISION</div><div class="cgrid" id="cg"></div></div>`;
+  cancelAnimationFrame(bgR);cancelAnimationFrame(shR);
+  const bcv=$('bcv'),scv=$('scv');
+  function abg(){drawBg(bcv,m.bg);bgR=requestAnimationFrame(abg)}abg();
+  function ash(){drawShip(scv,m.sys);shR=requestAnimationFrame(ash)}ash();
+  const ir=$('ir');
+  m.ch.forEach((c,idx)=>{
+    const t=setTimeout(()=>{
+      const el=document.createElement('div');el.className='chunk';el.innerHTML=`<div class="clbl">${c.l}</div>${c.x}`;ir.appendChild(el);setTimeout(()=>el.classList.add('on'),50);
+      if(idx===m.ch.length-1)setTimeout(()=>showC(m),800);
+    },c.d);S.rt.push(t);
+  });
+  m.fd.forEach(item=>{const t=setTimeout(()=>addFeed(item),item.d);S.ft.push(t)});
+  clearInterval(S.tmr);S.tl=m.t;$('timer').textContent=fmt(S.tl);$('timer').className='tval';
+  S.tmr=setInterval(()=>{
+    S.tl--;$('timer').textContent=fmt(S.tl);
+    const tv=$('timer');if(S.tl<=30)tv.className='tval danger';else if(S.tl<=60)tv.className='tval warn';
+    if(S.tl<=0){clearInterval(S.tmr);if(!S.done)toOut(m)}
+  },1000);
+}
+function showC(m){const ca=$('ca');if(!ca)return;ca.style.display='block';$('cg').innerHTML=m.cs.map((c,i)=>`<div class="cc" onclick="ans(${i})" id="cc${i}"><div class="ck">${c.k}</div><div class="ct">${c.t}</div><div class="cs">${c.s}</div></div>`).join('')}
+function ans(idx){
+  if(S.done)return;S.done=true;clearInterval(S.tmr);
+  const m=MS[S.i],c=m.cs[idx],dt=(Date.now()-S.ms)/1000;S.dt.push(dt);
+  document.querySelectorAll('.cc').forEach((el,i)=>{el.style.pointerEvents='none';if(m.cs[i].ok)el.classList.add('ok');if(i===idx&&!c.ok)el.classList.add('ng')});
+  let pts=0;if(c.ok){pts=Math.round(70+(S.tl/m.t)*30);toast('✓ '+c.r,'g')}else{pts=Math.round((S.tl/m.t)*20);toast('✗ '+c.r,'b')}
+  S.sc.push({ok:c.ok,pts,dt});S.tot=Math.round(S.sc.reduce((a,b)=>a+b.pts,0)/MS.length);$('score').textContent=S.tot;
+  const el=document.createElement('div');el.className='chunk';el.innerHTML=`<div class="clbl">◉ 解説</div>${c.r}`;
+  setTimeout(()=>{const ir=$('ir');if(ir){ir.appendChild(el);setTimeout(()=>el.classList.add('on'),50)}},600);
+  setTimeout(()=>{S.i++;if(S.i<MS.length){toast('MISSION '+S.i+' COMPLETE','i');setTimeout(()=>loadM(S.i),1200)}else setTimeout(()=>showRes(),1200)},2800);
+}
+function toOut(m){S.done=true;S.sc.push({ok:false,pts:0,dt:m.t});toast('TIME OUT — 判断が遅すぎます','b');setTimeout(()=>{S.i++;if(S.i<MS.length)loadM(S.i);else showRes()},1500)}
+function showRes(){
+  cancelAnimationFrame(bgR);cancelAnimationFrame(shR);clearInterval(S.tmr);ss('result');
+  const tot=S.tot,cor=S.sc.filter(s=>s.ok).length,avg=S.dt.length?Math.round(S.dt.reduce((a,b)=>a+b,0)/S.dt.length):0;
+  let g,gs;if(tot>=90){g='S';gs='OUTSTANDING COMMANDER'}else if(tot>=75){g='A';gs='EXCELLENT PERFORMANCE'}else if(tot>=60){g='B';gs='COMPETENT OFFICER'}else if(tot>=40){g='C';gs='NEEDS IMPROVEMENT'}else{g='D';gs='MISSION FAILED'}
+  $('rg').textContent=g;$('rg').className='rgrade '+g;$('rs').textContent=gs;
+  const gc={S:'var(--cyan)',A:'var(--green)',B:'var(--yellow)',C:'var(--orange)',D:'var(--red)'};
+  const sg=avg<30?'S':avg<60?'A':avg<90?'B':avg<120?'C':'D';
+  $('rm').innerHTML=[{v:tot,l:'TOTAL SCORE',c:'var(--cyan)'},{v:`${cor}/${MS.length}`,l:'CORRECT',c:'var(--green)'},{v:g,l:'GRADE',c:gc[g]},{v:sg,l:'SPEED',c:gc[sg]}].map(m=>`<div class="rm"><div class="rmv" style="color:${m.c}">${m.v}</div><div class="rml">${m.l}</div></div>`).join('');
+  const labs=['緊急判断力','リソース管理','倫理的判断','人的管理'],cols2=['var(--cyan)','var(--green)','var(--purple)','var(--orange)'];
+  $('ra').innerHTML=`<div style="font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--cyan);margin-bottom:1rem">▶ 能力別スコア</div>${S.sc.map((s,i)=>`<div class="arow"><span>${labs[i]||'—'}</span><div style="display:flex;align-items:center;gap:.8rem"><div class="abw"><div class="ab" data-w="${s.pts}" style="width:0%;background:${cols2[i]}"></div></div><span style="font-family:'Share Tech Mono',monospace;font-size:.7rem;min-width:28px;text-align:right;color:${cols2[i]}">${s.pts}</span></div></div>`).join('')}`;
+  setTimeout(()=>document.querySelectorAll('.ab').forEach(b=>{b.style.transition='width 1.2s ease';b.style.width=b.dataset.w+'%'}),400);
+}
+// restart is defined in new_code above
+</script>
+</body>
+</html>
