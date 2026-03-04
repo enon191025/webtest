@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>APEX SPACE</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#020408;--space:#060d1a;--panel:#0a1628;--panel2:#0d1f35;--border:#1a4a7a44;--b2:#1e90ff33;--cyan:#00d4ff;--c2:#0099cc;--red:#ff3355;--orange:#ff8800;--green:#00ff88;--yellow:#ffdd00;--purple:#aa44ff;--text:#c8e8ff;--muted:#4a7a9b}
@@ -112,58 +112,130 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-seri
 .toast.i{background:rgba(0,212,255,.1);border-color:var(--cyan);color:var(--cyan)}
 .scanline{position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.025) 2px,rgba(0,0,0,.025) 4px)}
 @media(max-width:768px){.glayout{grid-template-columns:1fr;height:auto}.pleft,.pright{display:none}.cgrid{grid-template-columns:1fr}.rmets{grid-template-columns:1fr 1fr}}
+
+/* ===== Business UI override (clean / Figma-like) ===== */
+:root{
+  --bg:#F9FAFB;
+  --space:#F9FAFB;
+  --panel:#FFFFFF;
+  --panel2:#FFFFFF;
+  --border:#E5E7EB;
+  --b2:#E5E7EB;
+  --cyan:#2563EB;
+  --c2:#1D4ED8;
+  --red:#DC2626;
+  --orange:#D97706;
+  --green:#059669;
+  --yellow:#F59E0B;
+  --purple:#2563EB;
+  --text:#111827;
+  --muted:#6B7280;
+}
+body{background:var(--bg);color:var(--text);font-family:Inter,'Noto Sans JP',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
+
+/* remove gaming effects */
+#sf,.scanline,.star,.glow,.toast{display:none!important}
+.ship-wrap{animation:none!important}
+.ititle,.hlogo,.tval,.sval,.evtitle,.rgrade{font-family:Inter,'Noto Sans JP',sans-serif!important;text-shadow:none!important;letter-spacing:.02em!important}
+
+/* intro */
+#intro{padding:32px 20px}
+.ititle{color:#111827!important;font-weight:800!important}
+.isub{font-family:Inter,'Noto Sans JP',sans-serif!important;color:var(--muted)!important;letter-spacing:.12em!important}
+.idesc{color:#374151!important}
+.badge{background:#F3F4F6!important;border:1px solid var(--border)!important;color:#374151!important;font-family:Inter,'Noto Sans JP',sans-serif!important}
+.btn-start{background:var(--cyan)!important;color:#fff!important;box-shadow:none!important;clip-path:none!important;border-radius:12px!important}
+.btn-start:hover{transform:translateY(-1px)!important;box-shadow:none!important}
+
+/* app chrome */
+.hud{background:#FFFFFF!important;border-bottom:1px solid var(--border)!important;backdrop-filter:none!important}
+.hlogo{color:#111827!important;font-weight:700!important}
+.hmis{font-family:Inter,'Noto Sans JP',sans-serif!important;color:var(--muted)!important;letter-spacing:.06em!important}
+.tval{color:#111827!important;font-size:1.4rem!important}
+.tval.warn,.tval.danger{animation:none!important}
+.tlbl,.slbl{font-family:Inter,'Noto Sans JP',sans-serif!important;color:var(--muted)!important;letter-spacing:.06em!important}
+.sval{color:var(--cyan)!important}
+.prog{height:8px!important;background:#F3F4F6!important;border:1px solid var(--border)!important}
+.progf{background:var(--cyan)!important}
+
+/* layout cards */
+.glayout{grid-template-columns:280px 1fr 260px!important;gap:16px!important;padding:16px!important;height:auto!important}
+.pleft,.pright,.pcenter{background:#fff!important;border:1px solid var(--border)!important;border-radius:14px!important;padding:14px!important}
+.pleft{border-right:none!important}
+.pright{border-left:none!important}
+.stitle{font-family:Inter,'Noto Sans JP',sans-serif!important;color:#111827!important;border-bottom:1px solid var(--border)!important;letter-spacing:.06em!important}
+.evcw{background:#fff!important;border:1px solid var(--border)!important;border-radius:14px!important}
+.evcw canvas{display:none!important}
+.evov{background:transparent!important}
+.evtitle{color:#111827!important}
+.evsub{font-family:Inter,'Noto Sans JP',sans-serif!important;color:var(--muted)!important;letter-spacing:.06em!important}
+
+/* status bars -> simple progress bars */
+.sw{display:none!important}
+.sbar{background:#F3F4F6!important;border:1px solid var(--border)!important;border-radius:999px!important;height:8px!important}
+.sbarf{border-radius:999px!important}
+.sname{color:#374151!important}
+.svl{font-family:Inter,'Noto Sans JP',sans-serif!important;color:var(--muted)!important}
+.alert{animation:none!important;border-radius:12px!important}
+
+/* info + choices */
+.chunk{background:#fff!important;border:1px solid var(--border)!important;border-radius:12px!important;color:#111827!important}
+.clbl{font-family:Inter,'Noto Sans JP',sans-serif!important;color:var(--muted)!important;letter-spacing:.04em!important}
+.chunk strong{color:#111827!important}
+.chunk .dr{color:var(--red)!important}
+.calbl{font-family:Inter,'Noto Sans JP',sans-serif!important;color:var(--muted)!important;letter-spacing:.06em!important}
+.cc{background:#fff!important;border:1px solid var(--border)!important;border-radius:12px!important}
+.cc::before{display:none!important}
+.cc:hover{border-color:#BFDBFE!important;background:#F8FAFF!important}
+.ck{font-family:Inter,'Noto Sans JP',sans-serif!important;color:var(--muted)!important}
+.ct{color:#111827!important}
+.cs{color:var(--muted)!important}
+
+/* feed */
+.fi{background:#fff!important;border:1px solid var(--border)!important;border-radius:12px!important}
+.ftime,.flbl,.ftr{font-family:Inter,'Noto Sans JP',sans-serif!important;color:var(--muted)!important}
+.fval{font-family:Inter,'Noto Sans JP',sans-serif!important;color:#111827!important}
+.tu,.td,.ts{color:var(--muted)!important}
+
+/* result */
+#result{padding:32px 20px}
+.rship{display:none!important}
+.rsub{font-family:Inter,'Noto Sans JP',sans-serif!important;color:var(--muted)!important;letter-spacing:.06em!important}
+.rmets{display:none!important}
+.ran{background:#fff!important;border:1px solid var(--border)!important;border-radius:14px!important}
+.btnr{background:var(--cyan)!important;color:#fff!important;border-color:var(--cyan)!important;clip-path:none!important;border-radius:12px!important}
+.btnr:hover{background:var(--c2)!important}
 </style>
 </head>
 <body>
-<div id="sf"></div>
-<div class="scanline"></div>
-<div class="toast" id="toast"></div>
-
 <div class="screen active" id="intro">
 <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem">
-<div class="ship-wrap"><div class="glow"></div>
-<svg viewBox="0 0 140 140" fill="none" width="140" height="140">
-<defs><filter id="gw"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-<ellipse cx="70" cy="112" rx="14" ry="5" fill="#00aaff" opacity=".3" filter="url(#gw)"><animate attributeName="ry" values="5;10;5" dur=".8s" repeatCount="indefinite"/><animate attributeName="opacity" values=".3;.7;.3" dur=".8s" repeatCount="indefinite"/></ellipse>
-<path d="M70 14 L91 70 L84 98 L70 105 L56 98 L49 70 Z" fill="#0a2a4a" stroke="#00d4ff" stroke-width="1.5" filter="url(#gw)"/>
-<path d="M49 70 L21 91 L42 84 L56 98 Z" fill="#062040" stroke="#0099cc" stroke-width="1"/>
-<path d="M91 70 L119 91 L98 84 L84 98 Z" fill="#062040" stroke="#0099cc" stroke-width="1"/>
-<ellipse cx="70" cy="46" rx="12" ry="16" fill="#001a33" stroke="#00d4ff" stroke-width="1"/>
-<ellipse cx="70" cy="44" rx="8" ry="10" fill="#0044aa" opacity=".6"/>
-<circle cx="70" cy="80" r="5" fill="none" stroke="#00d4ff" stroke-width="1" opacity=".5"/>
-<circle cx="70" cy="80" r="3" fill="#00aaff" opacity=".4"><animate attributeName="opacity" values=".4;.9;.4" dur="1.5s" repeatCount="indefinite"/></circle>
-<rect x="62" y="100" width="16" height="9" rx="2" fill="#0a2a4a" stroke="#0099cc" stroke-width="1"/>
-<path d="M62 108 L67 126 L70 119 L73 126 L78 108 Z" fill="url(#fl)" opacity=".85"><animate attributeName="d" values="M62 108 L67 126 L70 119 L73 126 L78 108 Z;M63 108 L68 122 L70 116 L72 122 L77 108 Z;M62 108 L67 126 L70 119 L73 126 L78 108 Z" dur=".3s" repeatCount="indefinite"/></path>
-<defs><linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00d4ff"/><stop offset="100%" stop-color="#0000ff" stop-opacity="0"/></linearGradient></defs>
-</svg></div>
 <div class="ititle">APEX SPACE</div>
-<div class="isub">CRISIS MANAGEMENT SIMULATION / ASSESSMENT v2.0</div>
-<p class="idesc">宇宙船 <strong style="color:var(--cyan)">PROMETHEUS-7</strong> の艦長として連続する危機に対応せよ。<br>情報はリアルタイムで出現する。スクショは意味がない。<br>あなたの思考プロセスそのものが評価される。</p>
+<div class="isub">CRISIS SIMULATION / BUSINESS ASSESSMENT</div>
+<p class="idesc">連続する状況変化のなかで、情報を統合し、制約条件を更新しながら意思決定してください。<br>情報は<strong style="color:var(--cyan)">5秒ごと</strong>に提示され、回答内容と所要時間が記録されます。</p>
 <div class="badges">
 <span class="badge">情報が時系列で出現</span>
-<span class="badge">AI突破不可設計</span>
+<span class="badge">条件が後から更新される</span>
 <span class="badge">リアルタイム計測</span>
-<span class="badge">4ミッション連続</span>
+<span class="badge">ニュートラルな進行</span>
 </div>
-<button class="btn-start" onclick="go()">▶ MISSION START</button>
+<button class="btn-start" onclick="go()">開始する</button>
 </div></div>
 
 <div class="screen" id="diff-select">
 <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;text-align:center">
-<div style="font-family:'Orbitron',monospace;font-size:clamp(1.5rem,4vw,3rem);font-weight:900;color:var(--cyan);margin-bottom:.5rem">SELECT DIFFICULTY</div>
-<div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.3em;color:var(--muted);margin-bottom:3rem">難易度を選択してください</div>
+<div style="font-size:clamp(1.5rem,4vw,2.4rem);font-weight:800;color:#111827;margin-bottom:.5rem;letter-spacing:.02em">難易度を選択</div>
+<div style="font-size:.9rem;color:var(--muted);margin-bottom:2.2rem">ミッション構成と設問量が変わります</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:700px;width:100%">
 <div onclick="startWithDiff('standard')" style="background:var(--panel);border:1px solid var(--b2);padding:2.5rem;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--b2)'">
-<div style="font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;color:var(--green);margin-bottom:1rem">STANDARD</div>
-<div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--muted);margin-bottom:1rem">中小企業 一般職向け</div>
-<div style="font-size:.8rem;line-height:1.8;color:rgba(200,232,255,.7)">判断系4本＋言語1本<br>合計5ミッション</div>
-<div style="margin-top:1.5rem;font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--green)">▶ START</div>
+<div style="font-size:1.5rem;font-weight:800;color:#111827;margin-bottom:.6rem">STANDARD</div>
+<div style="font-size:.9rem;color:var(--muted);margin-bottom:1rem">判断系4本＋言語1本（合計5ミッション）</div>
+<div style="margin-top:1.3rem;font-size:.9rem;color:var(--cyan);font-weight:700">開始</div>
 </div>
 <div onclick="startWithDiff('hard')" style="background:var(--panel);border:1px solid var(--b2);padding:2.5rem;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='var(--b2)'">
-<div style="font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;color:var(--red);margin-bottom:1rem">HARD</div>
-<div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--muted);margin-bottom:1rem">大手・外資・コンサル向け</div>
-<div style="font-size:.8rem;line-height:1.8;color:rgba(200,232,255,.7)">判断系4本＋言語2本<br>合計6ミッション</div>
-<div style="margin-top:1.5rem;font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--red)">▶ START</div>
+<div style="font-size:1.5rem;font-weight:800;color:#111827;margin-bottom:.6rem">HARD</div>
+<div style="font-size:.9rem;color:var(--muted);margin-bottom:1rem">判断系4本＋言語2本（合計6ミッション）</div>
+<div style="margin-top:1.3rem;font-size:.9rem;color:var(--cyan);font-weight:700">開始</div>
 </div>
 </div>
 </div>
@@ -179,7 +251,6 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-seri
 <div class="prog"><div class="progf" id="prog" style="width:0%"></div></div>
 <div class="glayout">
 <div class="pleft">
-<div><div class="stitle">▶ SHIP STATUS</div><div class="sw"><canvas id="scv"></canvas></div></div>
 <div><div class="stitle">▶ SYSTEMS</div><div id="slist"></div></div>
 <div class="alert" id="abox"><strong>⚠ ALERT</strong><br><span id="atxt"></span></div>
 </div>
@@ -198,17 +269,16 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-seri
 </div></div>
 
 <script>
-(function(){const sf=document.getElementById('sf');for(let i=0;i<160;i++){const s=document.createElement('div');s.className='star';const z=Math.random()*2+.4;s.style.cssText=`width:${z}px;height:${z}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${Math.random()*3+2}s;animation-delay:${Math.random()*3}s`;sf.appendChild(s)}})();
 
 const MS=[
 {id:1,title:'エンジン過熱',sub:'CRITICAL — ENGINE OVERHEAT',bg:'fire',t:180,
 sys:{hull:85,oxygen:100,engine:20,shields:70,comms:100},
 al:'エンジンブロックBが臨界温度を超過。冷却システム障害。',
 ch:[
-{d:0,l:'◉ 初期報告 T+0sec',x:'エンジン温度が<strong>820°C</strong>（臨界値750°C）超過。自動冷却は<span class="dr">機能不全</span>。'},
-{d:4500,l:'◉ 追加データ T+4sec',x:'原因：冷却剤パイプに<strong>微細クラック</strong>。修復には<strong>予備部品C-7</strong>が必要。在庫1個。'},
-{d:9000,l:'◉ 緊急警報 T+9sec',x:'放置すると<strong>8分後</strong>にエンジン爆発リスク。乗員<strong>12名全員</strong>が危険にさらされる。'},
-{d:14000,l:'◉ 副操縦士報告 T+14sec',x:'緊急出力低下で速度<strong>40%減</strong>。目的地到達が<strong>3日延長</strong>。乗員は全員安全確保可能。'},
+{d:0,l:'初期報告',x:'温度センサーが<strong>820°C</strong>を示す（臨界値750°C）。自動冷却は停止している。'},
+{d:4500,l:'追加データ',x:'ログ上は「センサー較正ずれ」の可能性が残る。推定実温は<strong>760〜840°C</strong>だが、上昇傾向は一致する。'},
+{d:9000,l:'追加データ',x:'冷却剤パイプに<strong>微細クラック</strong>。恒久修復には<strong>予備部品C-7</strong>が必要（在庫1）。一時措置として出力制限で上昇速度は抑制可能。'},
+{d:14000,l:'制約更新',x:'出力を40%下げると「危険域到達」は<strong>8分→10分</strong>へ延長見込み。ただし到達は<strong>3日延長</strong>する。'},
 ],
 cs:[
 {k:'A',t:'エンジンを即座に停止し、冷却修復を最優先にする',s:'乗員の安全最優先。航行は3日遅延。',ok:true,r:'人命最優先の正しい判断。3日の遅延より乗員12名の命が優先される。'},
@@ -216,15 +286,15 @@ cs:[
 {k:'C',t:'冷却剤を全量投入して強制冷却する',s:'短期間は温度を下げられるが冷却剤残量がゼロに。',ok:false,r:'将来の緊急時に冷却剤がなくなる。短期解決が長期リスクを生む典型例。'},
 {k:'D',t:'本部に緊急連絡し、指示を待つ',s:'通信遅延3分。その間も温度は上昇し続ける。',ok:false,r:'現場判断が求められる緊急局面での判断放棄は最悪の選択。'},
 ],
-fd:[{d:0,v:'820°C',l:'ENGINE TEMP',tr:'up',c:'#ff3355'},{d:3500,v:'12名',l:'CREW AT RISK',tr:'s',c:'#ffdd00'},{d:8000,v:'1個',l:'SPARE C-7',tr:'s',c:'#00d4ff'},{d:12000,v:'8分',l:'TO CRITICAL',tr:'dn',c:'#ff8800'}]},
+fd:[{d:0,v:'820°C',l:'ENGINE TEMP',tr:'up',c:'#111827'},{d:3500,v:'±80°C',l:'SENSOR OFFSET',tr:'stable',c:'#111827'},{d:8000,v:'C-7 ×1',l:'SPARE PART',tr:'stable',c:'#111827'},{d:12000,v:'10分',l:'TO CRITICAL',tr:'dn',c:'#111827'}]},
 {id:2,title:'酸素システム障害',sub:'WARNING — LIFE SUPPORT FAILURE',bg:'oxygen',t:180,
 sys:{hull:85,oxygen:35,engine:90,shields:70,comms:100},
 al:'酸素生成モジュール38%稼働。12時間で酸素枯渇の恐れ。',
 ch:[
-{d:0,l:'◉ システム警告 T+0sec',x:'酸素生成モジュールの稼働率が<strong>38%</strong>に低下。原因は<span class="dr">藻類バイオリアクターの汚染</span>。'},
-{d:5000,l:'◉ 分析結果 T+5sec',x:'汚染源：食料区画からの<strong>有機物漏出</strong>。修復には<strong>6時間</strong>必要。その間も酸素は低下し続ける。'},
-{d:10000,l:'◉ 追加報告 T+10sec',x:'冷凍睡眠カプセルを<strong>8名分</strong>起動すれば酸素消費量を<strong>60%削減</strong>できる。起動に<strong>2時間</strong>必要。'},
-{d:16000,l:'◉ 重大情報 T+16sec',x:'最寄り補給ステーションまで<strong>18時間</strong>。酸素の自然枯渇は<strong>12時間後</strong>の見込み。到達前に枯渇する。'},
+{d:0,l:'システム警告',x:'酸素生成モジュール稼働率が<strong>38%</strong>に低下。現状の消費ペースだと酸素は<strong>12時間</strong>。'},
+{d:5000,l:'分析結果',x:'アラートは「汚染」と表示されているが、詳細ログでは<strong>フィルタ目詰まり</strong>の可能性も示唆。修復は<strong>4〜6時間</strong>の幅がある。'},
+{d:10000,l:'追加報告',x:'冷凍睡眠カプセルを<strong>8名分</strong>起動すると酸素消費を<strong>60%削減</strong>できる（起動に<strong>2時間</strong>）。ただし緊急対応要員が減る。'},
+{d:16000,l:'制約更新',x:'最寄り補給ステーションまで<strong>18時間</strong>。ただし修復が<strong>4時間以内</strong>に収まれば、枯渇は回避できる見込み。'},
 ],
 cs:[
 {k:'A',t:'全乗員を今すぐ冷凍睡眠に入れ、酸素消費を最小化',s:'安全だが緊急対応能力がゼロになる。',ok:false,r:'全員眠ると次の緊急事態に誰も対応できない。修復作業も不可能になる。'},
@@ -232,15 +302,15 @@ cs:[
 {k:'C',t:'全員起こしたまま修復を急ぎ6時間での完了を目指す',s:'最速だが酸素消費が続き失敗時に全員危険。',ok:false,r:'修復が遅れた場合のリスクが極めて高い。全員の命を賭けるリスクは取れない。'},
 {k:'D',t:'補給ステーションへ全速力で向かい外部補給を待つ',s:'18時間かかり、12時間での枯渇に間に合わない。',ok:false,r:'単純計算で間に合わない。データを正確に読めていない判断。'},
 ],
-fd:[{d:0,v:'38%',l:'O2 PRODUCTION',tr:'dn',c:'#00d4ff'},{d:4000,v:'12h',l:'O2 REMAINING',tr:'dn',c:'#ffdd00'},{d:8500,v:'18h',l:'STATION ETA',tr:'s',c:'#ff8800'},{d:13000,v:'60%',l:'CRYO REDUCTION',tr:'s',c:'#00ff88'}]},
+fd:[{d:0,v:'38%',l:'O2 PRODUCTION',tr:'dn',c:'#111827'},{d:4000,v:'12h',l:'O2 REMAINING',tr:'dn',c:'#111827'},{d:8500,v:'4–6h',l:'REPAIR WINDOW',tr:'stable',c:'#111827'},{d:13000,v:'18h',l:'STATION ETA',tr:'stable',c:'#111827'}]},
 {id:3,title:'未知の信号を受信',sub:'UNKNOWN — UNIDENTIFIED SIGNAL',bg:'signal',t:180,
 sys:{hull:85,oxygen:100,engine:90,shields:40,comms:100},
 al:'未知発信源から強力な電磁波信号を受信。正体不明。',
 ch:[
-{d:0,l:'◉ 信号解析 T+0sec',x:'信号は<strong>パターン化された繰り返し</strong>を持つ。ランダムノイズではない。発信源は<strong>前方3万km</strong>。'},
-{d:5000,l:'◉ 追加解析 T+5sec',x:'周波数帯が<strong>60年前の人類通信規格</strong>に一致。行方不明の<strong>探索船ARES-3</strong>の識別コードを含む。'},
-{d:10000,l:'◉ センサー報告 T+10sec',x:'発信源付近に<strong>熱源反応</strong>あり。生命反応の可能性は<strong>23%</strong>。接近するとシールドが<span class="dr">20%低下</span>する。'},
-{d:16000,l:'◉ 本部交信 T+16sec',x:'ARES-3の捜索は<strong>40年前に打ち切り</strong>。生存者がいる場合の救助は義務。宇宙嵐リスク：12時間以内に<strong>70%</strong>。'},
+{d:0,l:'信号解析',x:'信号は<strong>繰り返しパターン</strong>を持つ。発信源は<strong>前方3万km</strong>。'},
+{d:5000,l:'追加解析',x:'周波数帯が<strong>旧式の人類通信規格</strong>に一致。識別コードは探索船<strong>ARES-3</strong>に類似するが、完全一致ではない。'},
+{d:10000,l:'センサー報告',x:'発信源付近に<strong>熱源反応</strong>。生命反応推定<strong>23%</strong>。接近時のシールド低下は「最大20%」だが、偏波調整で<strong>8〜12%</strong>へ抑えられる可能性。'},
+{d:16000,l:'制約更新',x:'本部指示：救助義務はあるが、宇宙嵐リスクが<strong>12時間以内に70%</strong>。接近するなら<strong>15分以内に離脱計画</strong>が必要。'},
 ],
 cs:[
 {k:'A',t:'シールドを維持しながら距離を保ち信号解析を続ける',s:'安全優先。生存者がいても助けられない。',ok:false,r:'情報収集は正しいが宇宙嵐前に決断が必要。猶予がない状況での回避は責任放棄。'},
@@ -248,15 +318,15 @@ cs:[
 {k:'C',t:'即座に方向転換し嵐を避けて安全な宇宙域に退避',s:'乗員の安全を最優先。ARES-3は諦める。',ok:false,r:'生存者確認すらしない判断。人道的観点から問題がある。'},
 {k:'D',t:'シールドを全出力にして接近、救助を最優先にする',s:'シールド強化で電磁波を相殺できるがエネルギー激増。',ok:false,r:'他のシステムへの影響が大きすぎる。バランスを欠いた判断。'},
 ],
-fd:[{d:0,v:'23%',l:'LIFE SIGNAL',tr:'s',c:'#aa44ff'},{d:4000,v:'40%',l:'SHIELD LEVEL',tr:'dn',c:'#ffdd00'},{d:9000,v:'70%',l:'STORM RISK',tr:'up',c:'#ff3355'},{d:14000,v:'60yr',l:'ARES-3 AGO',tr:'s',c:'#00d4ff'}]},
+fd:[{d:0,v:'23%',l:'LIFE SIGNAL',tr:'stable',c:'#111827'},{d:4000,v:'3万km',l:'RANGE',tr:'stable',c:'#111827'},{d:9000,v:'-8〜20%',l:'SHIELD IMPACT',tr:'dn',c:'#111827'},{d:14000,v:'70%',l:'STORM RISK',tr:'up',c:'#111827'}]},
 {id:4,title:'乗員による反乱',sub:'CRITICAL — CREW MUTINY DETECTED',bg:'mutiny',t:180,
 sys:{hull:85,oxygen:100,engine:90,shields:80,comms:60},
 al:'乗員3名が武装して艦橋へ向かっている。通信の一部が遮断。',
 ch:[
-{d:0,l:'◉ 艦橋報告 T+0sec',x:'エンジニア班の<strong>3名</strong>が艦橋に向かっている。要求は「<strong>ミッション中止と即時帰還</strong>」。'},
-{d:5000,l:'◉ 背景情報 T+5sec',x:'行動理由：先月の任務変更で<strong>帰還が6ヶ月延長</strong>。3名とも<strong>家族に重大な問題</strong>を抱えている。'},
-{d:10000,l:'◉ 追加状況 T+10sec',x:'残り乗員<strong>9名のうち5名</strong>が3名の訴えに同情的。全面衝突になれば船内統制が<span class="dr">崩壊</span>する可能性。'},
-{d:16000,l:'◉ 通信傍受 T+16sec',x:'傍受した会話：3名は<strong>「暴力は避けたい」</strong>と話している。<strong>交渉の余地あり</strong>。ただし今も艦橋に接近中。'},
+{d:0,l:'艦橋報告',x:'エンジニア班の<strong>3名</strong>が艦橋へ接近。要求は「<strong>任務中止と即時帰還</strong>」。'},
+{d:5000,l:'背景情報',x:'先月の任務変更で帰還が<strong>6ヶ月延長</strong>。3名はいずれも家庭事情を抱え、心理的負荷が高い。'},
+{d:10000,l:'追加状況',x:'残り乗員<strong>9名のうち5名</strong>が同情的。強制措置は短期的に制御できても、長期的に統制が揺らぐ可能性。'},
+{d:16000,l:'制約更新',x:'傍受：3名は「<strong>暴力は避けたい</strong>」一方、隔離・ロックが先に実施されると<strong>武装化に傾く</strong>兆候。交渉余地はあるが時間は少ない。'},
 ],
 cs:[
 {k:'A',t:'セキュリティで艦橋をロックし3名を物理的に隔離する',s:'制御を確保。しかし5名の同情者が行動に出る可能性。',ok:false,r:'力による制圧は根本解決にならず、5名の同情者が反応する可能性が高い。'},
@@ -264,13 +334,23 @@ cs:[
 {k:'C',t:'3名のリーダーと1対1で交渉し個別に説得する',s:'個別対応で感情的な訴えに応える。',ok:false,r:'他の9名を無視した対応。集団の問題を個人交渉で解決しようとすることで分断が深まる。'},
 {k:'D',t:'本部に連絡しミッション変更権限を要請する',s:'根本的な問題を解決できる可能性がある。',ok:false,r:'通信に時間がかかり、3名は今も接近中。現在の緊急事態への対応にならない。'},
 ],
-fd:[{d:0,v:'3名',l:'MUTINEERS',tr:'s',c:'#ff3355'},{d:4000,v:'5/9',l:'SYMPATHIZERS',tr:'up',c:'#ff8800'},{d:9000,v:'60%',l:'COMMS BLOCKED',tr:'dn',c:'#ffdd00'},{d:14000,v:'LOW',l:'VIOLENCE RISK',tr:'s',c:'#00ff88'}]}
+fd:[{d:0,v:'3名',l:'MUTINEERS',tr:'stable',c:'#111827'},{d:4000,v:'5/9',l:'SYMPATHIZERS',tr:'up',c:'#111827'},{d:9000,v:'60%',l:'COMMS BLOCKED',tr:'dn',c:'#111827'},{d:14000,v:'交渉余地',l:'NEGOTIATION',tr:'stable',c:'#111827'}]}
 ];
 
 const S={i:0,sc:[],tmr:null,tl:0,done:false,tot:0,dt:[],rt:[],ft:[],ms:0};
 const $=id=>document.getElementById(id);
 function ss(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0)}
-function toast(msg,type='i'){const t=$('toast');t.textContent=msg;t.className='toast '+type+' on';setTimeout(()=>t.classList.remove('on'),2800)}
+const NEUTRAL_MSG='データを記録しました。次のミッションに移行します...';
+function toast(){/* disabled: no correct/incorrect feedback */}
+function showNeutralMessage(){
+  const ir=$('ir');
+  if(!ir)return;
+  const el=document.createElement('div');
+  el.className='chunk';
+  el.innerHTML=`<div class="clbl">記録</div>${NEUTRAL_MSG}`;
+  ir.appendChild(el);
+  setTimeout(()=>el.classList.add('on'),50);
+}
 function fmt(s){return`${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`}
 
 let bgR,shR;
@@ -317,7 +397,7 @@ function updSys(sys){
   $('slist').innerHTML=Object.entries(sys).map(([k,v])=>{const cl=v>60?'#00ff88':v>30?'#ffdd00':'#ff3355';return`<div class="srow"><span class="sname">${n[k]}</span><div class="sbar"><div class="sbarf" style="width:${v}%;background:${cl}"></div></div><span class="svl" style="color:${cl}">${v}%</span></div>`}).join('')}
 
 function addFeed(item){
-  const f=$('feed'),tc=item.tr==='up'?'tu':item.tr==='dn'?'td':'ts',ti=item.tr==='up'?'▲ 上昇':item.tr==='dn'?'▼ 低下':'— 安定',el=document.createElement('div');
+  const f=$('feed'),tc=item.tr==='up'?'tu':item.tr==='dn'?'td':'ts',ti=item.tr==='up'?'上昇':item.tr==='dn'?'低下':'安定',el=document.createElement('div');
   el.className='fi';el.innerHTML=`<div class="ftime">${new Date().toLocaleTimeString('ja')}</div><div class="fval" style="color:${item.c}">${item.v}</div><div class="flbl">${item.l}</div><div class="ftr ${tc}">${ti}</div>`;
   f.insertBefore(el,f.firstChild);setTimeout(()=>el.classList.add('on'),50);
 }
@@ -328,10 +408,10 @@ const LM=[
 sys:{hull:85,oxygen:100,engine:90,shields:70,comms:80},
 al:'宇宙理事会から極秘会議録が届いた。発言の真意を読み取れ。',
 ch:[
-{d:0,l:'◉ 文書受信 T+0sec',x:'【宇宙理事会 第447回緊急会議録】<br>議長：「今回の<strong>エネルギー配分問題</strong>については、全加盟星系の意見を尊重した上で慎重に判断したい」'},
-{d:5000,l:'◉ 続き T+5sec',x:'A星系代表：「我々は3期連続でエネルギー割当が<strong>平均より12%低い</strong>。今回こそ是正を求める」<br>議長：「ご意見はよく理解しました。<strong>次回会議で改めて検討</strong>します」'},
-{d:11000,l:'◉ 続き T+11sec',x:'B星系代表：「議長、次回とはいつですか」<br>議長：「<strong>状況を見ながら適切なタイミングで</strong>設定します。本日はここまでとします」<br>【会議終了】'},
-{d:17000,l:'◉ 分析指示 T+17sec',x:'任務：この会議録を読み、<strong>議長の真の意図</strong>として最も正確なものを選べ。'},
+{d:0,l:'文書受信',x:'【宇宙理事会 第447回 緊急会議録（抜粋）】<br>議長：「今回の<strong>エネルギー配分問題</strong>は、全加盟星系の意見を尊重し、慎重に判断したい」'},
+{d:5000,l:'続き',x:'A星系代表：「3期連続で割当が<strong>平均より12%低い</strong>。今回こそ是正を求める」<br>議長：「ご意見は理解しました。<strong>次回会議で改めて検討</strong>します」'},
+{d:11000,l:'制約更新',x:'B星系代表：「次回とはいつですか」<br>議長：「<strong>状況を見ながら適切なタイミングで</strong>設定します。本日はここまでとします」<br>※ 議題は結論が出ないまま終了。次回日程は未確定。'},
+{d:17000,l:'判断指示',x:'任務：この会議録を読み、<strong>議長の意図</strong>として最も正確なものを選べ。'},
 ],
 cs:[
 {k:'A',t:'議長はA星系の要求を真剣に受け止め、次回会議で是正する意向だ',s:'議長の発言を額面通りに受け取った解釈。',ok:false,r:'「次回会議で検討」「状況を見ながら」は典型的な先送り表現。真剣な是正意図とは読み取れない。'},
@@ -340,19 +420,19 @@ cs:[
 {k:'D',t:'会議録の情報だけでは議長の意図は判断できない',s:'情報不足として判断を保留した。',ok:false,r:'十分な文脈がある。「判断できない」は思考停止であり、ビジネス現場では通用しない。'},
 ],
 fd:[
-{d:0,v:'3期',l:'UNDERFUNDED',tr:'up',c:'#ff3355'},
-{d:5000,v:'-12%',l:'ENERGY DEFICIT',tr:'dn',c:'#ffdd00'},
-{d:11000,v:'先送り',l:'DECISION',tr:'stable',c:'#ff8800'},
-{d:16000,v:'LOW',l:'RESOLUTION',tr:'dn',c:'#aa44ff'},
+{d:0,v:'3期',l:'UNDERFUNDED',tr:'stable',c:'#111827'},
+{d:5000,v:'-12%',l:'ENERGY DEFICIT',tr:'dn',c:'#111827'},
+{d:11000,v:'未確定',l:'NEXT MEETING',tr:'stable',c:'#111827'},
+{d:16000,v:'先送り',l:'DECISION',tr:'stable',c:'#111827'},
 ]},
 {id:6,title:'宇宙企業 合併交渉メモ',sub:'LANGUAGE — 高難度・矛盾情報分析',bg:'mutiny',t:210,
 sys:{hull:75,oxygen:100,engine:90,shields:60,comms:90},
 al:'極秘の合併交渉メモが流出。矛盾する3つの文書から真実を見抜け。',
 ch:[
-{d:0,l:'◉ メモA受信 T+0sec',x:'【NEXUS社 社内メモ】<br>「ORION社との合併交渉は<strong>順調に進展</strong>している。来月中の合意を目指す。株主への報告は合意後に行う予定」'},
-{d:6000,l:'◉ メモB受信 T+6sec',x:'【ORION社 取締役会議事録 同日付】<br>「NEXUS社との交渉：先方の<strong>企業評価額に大きな乖離</strong>があり、現時点での合意は困難。交渉継続か否かを<strong>再検討</strong>する必要がある」'},
-{d:13000,l:'◉ ニュース受信 T+13sec',x:'【宇宙経済ニュース 翌日】<br>NEXUS社CEO：<strong>「複数の戦略的パートナーシップを積極的に検討中」</strong>。具体的な社名は明かさず。株価は3%上昇。'},
-{d:19000,l:'◉ 判断指示 T+19sec',x:'3つの文書を総合して判断せよ。<strong>現在の合併交渉の実態</strong>として最も正確なものを選べ。'},
+{d:0,l:'文書A',x:'【NEXUS社 社内メモ】<br>「ORION社との合併交渉は<strong>順調に進展</strong>。来月中の合意を目指す。株主への報告は合意後」'},
+{d:6000,l:'文書B',x:'【ORION社 取締役会議事録（同日）】<br>「NEXUS社の提示額に<strong>大きな乖離</strong>。現時点で合意は困難。交渉継続の是非を<strong>再検討</strong>」'},
+{d:13000,l:'制約更新',x:'【宇宙経済ニュース（翌日）】<br>NEXUS社CEO：「<strong>複数の戦略的パートナーシップ</strong>を検討中」<br>※ 合併と提携が意図的に混同されている可能性がある。株価は3%上昇。'},
+{d:19000,l:'判断指示',x:'3文書を総合して判断せよ。<strong>現在の交渉実態</strong>として最も正確なものを選べ。'},
 ],
 cs:[
 {k:'A',t:'合併交渉は順調で来月中に合意する可能性が高い',s:'メモAの内容を信じた判断。',ok:false,r:'メモAはNEXUS社の社内メモ。同日のORION社議事録では「合意は困難」と真逆の認識。一次情報を鵜呑みにしてはいけない。'},
@@ -361,10 +441,10 @@ cs:[
 {k:'D',t:'CEOの発言からNEXUS社はORION社以外も交渉しており優先候補ではない',s:'ニュース記事だけを重視した判断。',ok:false,r:'「複数の戦略的パートナーシップ」は合併以外の提携も含む可能性がある。この発言だけで断定できない。'},
 ],
 fd:[
-{d:0,v:'乖離大',l:'VALUATION GAP',tr:'up',c:'#ff3355'},
-{d:6000,v:'再検討',l:'ORION STATUS',tr:'dn',c:'#ffdd00'},
-{d:13000,v:'曖昧',l:'CEO STATEMENT',tr:'stable',c:'#ff8800'},
-{d:18000,v:'HIGH',l:'INFO CONFLICT',tr:'up',c:'#aa44ff'},
+{d:0,v:'乖離大',l:'VALUATION GAP',tr:'up',c:'#111827'},
+{d:6000,v:'再検討',l:'ORION STATUS',tr:'dn',c:'#111827'},
+{d:13000,v:'曖昧',l:'CEO STATEMENT',tr:'stable',c:'#111827'},
+{d:18000,v:'高',l:'INFO CONFLICT',tr:'up',c:'#111827'},
 ]}
 ];
 
@@ -392,19 +472,15 @@ function loadAM(i){
   const ab=$('abox');ab.className='alert on';$('atxt').textContent=m.al;
   $('feed').innerHTML='';
   const evs=$('evs');
-  evs.innerHTML='<div class="evcw"><canvas id="bcv"></canvas><div class="evov"><div class="evtitle">'+m.title+'</div><div class="evsub">'+m.sub+'</div></div></div><div id="ir"></div><div class="ca" id="ca"><div class="calbl">&#9658; SELECT YOUR DECISION</div><div class="cgrid" id="cg"></div></div>';
-  cancelAnimationFrame(bgR);cancelAnimationFrame(shR);
-  const bcv=$('bcv'),scv=$('scv');
-  function abg(){drawBg(bcv,m.bg);bgR=requestAnimationFrame(abg)}abg();
-  function ash(){drawShip(scv,m.sys);shR=requestAnimationFrame(ash)}ash();
+  evs.innerHTML='<div class="evcw"><div class="evov"><div class="evtitle">'+m.title+'</div><div class="evsub">'+m.sub+'</div></div></div><div id="ir"></div><div class="ca" id="ca"><div class="calbl">回答を選択してください</div><div class="cgrid" id="cg"></div></div>';
   const ir=$('ir');
   m.ch.forEach((c,idx)=>{
     const t=setTimeout(()=>{
       const el=document.createElement('div');el.className='chunk';el.innerHTML='<div class="clbl">'+c.l+'</div>'+c.x;ir.appendChild(el);setTimeout(()=>el.classList.add('on'),50);
       if(idx===m.ch.length-1)setTimeout(()=>showC(m),800);
-    },c.d);S.rt.push(t);
+    },idx*5000);S.rt.push(t);
   });
-  m.fd.forEach(item=>{const t=setTimeout(()=>addFeed(item),item.d);S.ft.push(t)});
+  m.fd.forEach((item,idx)=>{const t=setTimeout(()=>addFeed(item),idx*5000);S.ft.push(t)});
   clearInterval(S.tmr);S.tl=m.t;$('timer').textContent=fmt(S.tl);$('timer').className='tval';
   S.tmr=setInterval(()=>{
     S.tl--;$('timer').textContent=fmt(S.tl);
@@ -413,74 +489,54 @@ function loadAM(i){
   },1000);
 }
 
-function toOutAM(m){S.done=true;S.sc.push({ok:false,pts:0,dt:m.t});toast('TIME OUT','b');setTimeout(()=>{S.i++;loadAM(S.i)},1500)}
+function toOutAM(m){
+  S.done=true;
+  S.sc.push({ok:false,pts:0,dt:m.t});
+  showNeutralMessage();
+  setTimeout(()=>{S.i++;loadAM(S.i)},1600);
+}
 
 function ansAM(idx){
   if(S.done)return;S.done=true;clearInterval(S.tmr);
   const m=AMR[S.i],c=m.cs[idx],dt=(Date.now()-S.ms)/1000;S.dt.push(dt);
-  document.querySelectorAll('.cc').forEach((el,i)=>{el.style.pointerEvents='none';if(m.cs[i].ok)el.classList.add('ok');if(i===idx&&!c.ok)el.classList.add('ng')});
-  let pts=0;if(c.ok){pts=Math.round(70+(S.tl/m.t)*30);toast('&#10003; '+c.r,'g')}else{pts=Math.round((S.tl/m.t)*20);toast('&#10007; '+c.r,'b')}
+  document.querySelectorAll('.cc').forEach((el,i)=>{el.style.pointerEvents='none';if(i===idx)el.classList.add('selected')});
+  let pts=0;
+  if(c.ok){pts=Math.round(70+(S.tl/m.t)*30)}else{pts=Math.round((S.tl/m.t)*20)}
   S.sc.push({ok:c.ok,pts,dt});S.tot=Math.round(S.sc.reduce((a,b)=>a+b.pts,0)/AMR.length);$('score').textContent=S.tot;
-  const el=document.createElement('div');el.className='chunk';el.innerHTML='<div class="clbl">&#9654; 解説</div>'+c.r;
-  setTimeout(()=>{const ir=$('ir');if(ir){ir.appendChild(el);setTimeout(()=>el.classList.add('on'),50)}},600);
-  setTimeout(()=>{S.i++;const nx=AMR[S.i];if(nx){toast('MISSION '+S.i+' COMPLETE','i');setTimeout(()=>loadAM(S.i),1200)}else setTimeout(()=>showRes(),1200)},2800);
+  showNeutralMessage();
+  setTimeout(()=>{S.i++;if(S.i<AMR.length)loadAM(S.i);else showRes()},1600);
 }
 
 function restart(){S.i=0;S.sc=[];S.tot=0;S.dt=[];AMR=[];go()}
-
-function loadM(i){
-  if(i>=MS.length){showRes();return}
-  const m=MS[i];S.done=false;S.ms=Date.now();
-  S.rt.forEach(clearTimeout);S.rt=[];S.ft.forEach(clearTimeout);S.ft=[];
-  $('mislbl').textContent=`MISSION ${m.id} / ${MS.length}`;
-  $('prog').style.width=`${(i/MS.length)*100}%`;
-  updSys(m.sys);
-  const ab=$('abox');ab.className='alert on';$('atxt').textContent=m.al;
-  $('feed').innerHTML='';
-  const evs=$('evs');
-  evs.innerHTML=`<div class="evcw"><canvas id="bcv"></canvas><div class="evov"><div class="evtitle">${m.title}</div><div class="evsub">${m.sub}</div></div></div><div id="ir"></div><div class="ca" id="ca"><div class="calbl">▶ SELECT YOUR DECISION</div><div class="cgrid" id="cg"></div></div>`;
-  cancelAnimationFrame(bgR);cancelAnimationFrame(shR);
-  const bcv=$('bcv'),scv=$('scv');
-  function abg(){drawBg(bcv,m.bg);bgR=requestAnimationFrame(abg)}abg();
-  function ash(){drawShip(scv,m.sys);shR=requestAnimationFrame(ash)}ash();
-  const ir=$('ir');
-  m.ch.forEach((c,idx)=>{
-    const t=setTimeout(()=>{
-      const el=document.createElement('div');el.className='chunk';el.innerHTML=`<div class="clbl">${c.l}</div>${c.x}`;ir.appendChild(el);setTimeout(()=>el.classList.add('on'),50);
-      if(idx===m.ch.length-1)setTimeout(()=>showC(m),800);
-    },c.d);S.rt.push(t);
-  });
-  m.fd.forEach(item=>{const t=setTimeout(()=>addFeed(item),item.d);S.ft.push(t)});
-  clearInterval(S.tmr);S.tl=m.t;$('timer').textContent=fmt(S.tl);$('timer').className='tval';
-  S.tmr=setInterval(()=>{
-    S.tl--;$('timer').textContent=fmt(S.tl);
-    const tv=$('timer');if(S.tl<=30)tv.className='tval danger';else if(S.tl<=60)tv.className='tval warn';
-    if(S.tl<=0){clearInterval(S.tmr);if(!S.done)toOut(m)}
-  },1000);
-}
-function showC(m){const ca=$('ca');if(!ca)return;ca.style.display='block';$('cg').innerHTML=m.cs.map((c,i)=>`<div class="cc" onclick="ans(${i})" id="cc${i}"><div class="ck">${c.k}</div><div class="ct">${c.t}</div><div class="cs">${c.s}</div></div>`).join('')}
-function ans(idx){
-  if(S.done)return;S.done=true;clearInterval(S.tmr);
-  const m=MS[S.i],c=m.cs[idx],dt=(Date.now()-S.ms)/1000;S.dt.push(dt);
-  document.querySelectorAll('.cc').forEach((el,i)=>{el.style.pointerEvents='none';if(m.cs[i].ok)el.classList.add('ok');if(i===idx&&!c.ok)el.classList.add('ng')});
-  let pts=0;if(c.ok){pts=Math.round(70+(S.tl/m.t)*30);toast('✓ '+c.r,'g')}else{pts=Math.round((S.tl/m.t)*20);toast('✗ '+c.r,'b')}
-  S.sc.push({ok:c.ok,pts,dt});S.tot=Math.round(S.sc.reduce((a,b)=>a+b.pts,0)/MS.length);$('score').textContent=S.tot;
-  const el=document.createElement('div');el.className='chunk';el.innerHTML=`<div class="clbl">◉ 解説</div>${c.r}`;
-  setTimeout(()=>{const ir=$('ir');if(ir){ir.appendChild(el);setTimeout(()=>el.classList.add('on'),50)}},600);
-  setTimeout(()=>{S.i++;if(S.i<MS.length){toast('MISSION '+S.i+' COMPLETE','i');setTimeout(()=>loadM(S.i),1200)}else setTimeout(()=>showRes(),1200)},2800);
-}
-function toOut(m){S.done=true;S.sc.push({ok:false,pts:0,dt:m.t});toast('TIME OUT — 判断が遅すぎます','b');setTimeout(()=>{S.i++;if(S.i<MS.length)loadM(S.i);else showRes()},1500)}
+function showC(m){const ca=$('ca');if(!ca)return;ca.style.display='block';$('cg').innerHTML=m.cs.map((c,i)=>`<div class="cc" onclick="ansAM(${i})" id="cc${i}"><div class="ck">${c.k}</div><div class="ct">${c.t}</div><div class="cs">${c.s}</div></div>`).join('')}
 function showRes(){
-  cancelAnimationFrame(bgR);cancelAnimationFrame(shR);clearInterval(S.tmr);ss('result');
-  const tot=S.tot,cor=S.sc.filter(s=>s.ok).length,avg=S.dt.length?Math.round(S.dt.reduce((a,b)=>a+b,0)/S.dt.length):0;
-  let g,gs;if(tot>=90){g='S';gs='OUTSTANDING COMMANDER'}else if(tot>=75){g='A';gs='EXCELLENT PERFORMANCE'}else if(tot>=60){g='B';gs='COMPETENT OFFICER'}else if(tot>=40){g='C';gs='NEEDS IMPROVEMENT'}else{g='D';gs='MISSION FAILED'}
-  $('rg').textContent=g;$('rg').className='rgrade '+g;$('rs').textContent=gs;
-  const gc={S:'var(--cyan)',A:'var(--green)',B:'var(--yellow)',C:'var(--orange)',D:'var(--red)'};
-  const sg=avg<30?'S':avg<60?'A':avg<90?'B':avg<120?'C':'D';
-  $('rm').innerHTML=[{v:tot,l:'TOTAL SCORE',c:'var(--cyan)'},{v:`${cor}/${MS.length}`,l:'CORRECT',c:'var(--green)'},{v:g,l:'GRADE',c:gc[g]},{v:sg,l:'SPEED',c:gc[sg]}].map(m=>`<div class="rm"><div class="rmv" style="color:${m.c}">${m.v}</div><div class="rml">${m.l}</div></div>`).join('');
-  const labs=['緊急判断力','リソース管理','倫理的判断','人的管理'],cols2=['var(--cyan)','var(--green)','var(--purple)','var(--orange)'];
-  $('ra').innerHTML=`<div style="font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--cyan);margin-bottom:1rem">▶ 能力別スコア</div>${S.sc.map((s,i)=>`<div class="arow"><span>${labs[i]||'—'}</span><div style="display:flex;align-items:center;gap:.8rem"><div class="abw"><div class="ab" data-w="${s.pts}" style="width:0%;background:${cols2[i]}"></div></div><span style="font-family:'Share Tech Mono',monospace;font-size:.7rem;min-width:28px;text-align:right;color:${cols2[i]}">${s.pts}</span></div></div>`).join('')}`;
-  setTimeout(()=>document.querySelectorAll('.ab').forEach(b=>{b.style.transition='width 1.2s ease';b.style.width=b.dataset.w+'%'}),400);
+  clearInterval(S.tmr);ss('result');
+  const tot=S.tot;
+  const avg=S.dt.length?(S.dt.reduce((a,b)=>a+b,0)/S.dt.length):0;
+  const pts=S.sc.map(s=>s.pts||0);
+  const mean=pts.length?(pts.reduce((a,b)=>a+b,0)/pts.length):0;
+  const variance=pts.length?(pts.reduce((a,b)=>a+Math.pow(b-mean,2),0)/pts.length):0;
+  const std=Math.sqrt(variance);
+  const clamp=n=>Math.max(0,Math.min(100,Math.round(n)));
+  const decision=clamp(mean);
+  const speed=clamp(100-(avg/180)*70);
+  const consistency=clamp(100-(std/30)*60);
+  const integration=clamp((tot*0.6)+(consistency*0.4));
+
+  $('rg').textContent=String(tot);
+  $('rg').className='rgrade';
+  $('rs').textContent='総合評価スコア';
+  $('rm').innerHTML='';
+
+  const labs=[
+    {n:'意思決定の妥当性',v:decision},
+    {n:'情報統合 / 更新追従',v:integration},
+    {n:'処理速度（相対）',v:speed},
+    {n:'一貫性（ばらつき）',v:consistency},
+  ];
+  $('ra').innerHTML=`<div style="font-family:Inter,'Noto Sans JP',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:.8rem;color:#111827">分析グラフ</div>`+
+    labs.map((d,i)=>`<div class="arow"><span>${d.n}</span><div style="display:flex;align-items:center;gap:.8rem;min-width:160px;justify-content:flex-end"><div class="abw"><div class="ab" data-w="${d.v}" style="width:0%;background:var(--cyan)"></div></div></div></div>`).join('');
+  setTimeout(()=>document.querySelectorAll('.ab').forEach(b=>{b.style.transition='width 1s ease';b.style.width=b.dataset.w+'%'}),200);
 }
 // restart is defined in new_code above
 </script>
